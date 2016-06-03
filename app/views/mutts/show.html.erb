@@ -1,0 +1,14 @@
+<h1><%= @mutt.name %></h1>
+
+<% photo = @mutt.photos.find_by(profile: true) || mutt.photos.first %>
+<p><%= image_tag photo.image.url(:medium) %></p>
+
+<h3><%= @mutt.name %>'s Photos</h3>
+
+<% @mutt.photos.each do |photo| %>
+  <p><%= image_tag photo.image.url(:small) %></p>
+<% end %>
+
+<%= form_for :photo, url: new_mutt_photo_path(@mutt), method: :get do |f| %>
+  <%= f.submit "Add a photo for #{ @mutt.name }" %>
+<% end %>
