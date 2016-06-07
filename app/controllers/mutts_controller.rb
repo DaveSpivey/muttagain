@@ -3,8 +3,10 @@ class MuttsController < ApplicationController
   before_action :set_mutt, only: [:show, :edit, :update, :destroy]
 
   def index
-    @mutts = Mutt.all
     @photos = Photo.where(profile: true)
+    if @photos.empty?
+      flash[:error] = "No mutt photos!"
+    end
   end
 
   def show
@@ -14,7 +16,7 @@ class MuttsController < ApplicationController
     @mutt = Mutt.new(mutt_params)
     @mutt.owner_id = current_user.id
     if @mutt.save
-      render mutt_path(@mutt)
+      redirect_to(@mutt)
     else
       flash[:error] = "Mutt could not be saved"
       redirect_to new_mutt_path
