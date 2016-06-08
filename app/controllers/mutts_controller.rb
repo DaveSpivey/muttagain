@@ -6,6 +6,18 @@ class MuttsController < ApplicationController
     @photos = Photo.where(profile: true)
     if @photos.empty?
       flash[:error] = "No mutt photos!"
+    else
+      mutts = {}
+      mutts["photos"] = @photos.map do |pic|
+        mutt = Mutt.find(pic.mutt_id)
+        { photoId: pic.id, photoUrl: pic.image.url(:large), muttId: mutt.id, muttName: mutt.name }
+      end
+    end
+
+    respond_to do |format|
+      format.html
+      format.js
+      format.json { render json: mutts }
     end
   end
 

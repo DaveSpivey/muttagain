@@ -4,7 +4,7 @@
   <% if flash[:error] %>
     <h2><%= flash[:error] %></h2>
   <% else %>
-    <%= react_component('Carousel', { photo: @photos.first.image.url(:large) } ) %>
+    <%= react_component('MuttDisplay', { url: "/mutts" }, { id: "mutt-display" } ) %>
   <% end %>
 
 </div>
