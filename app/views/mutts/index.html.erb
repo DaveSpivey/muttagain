@@ -1,7 +1,10 @@
 <div>
   <p>and here's mutts#index</p>
 
-  <% @photos.each do |photo| %>
-    <p><%= image_tag photo.image.url(:medium) %></p>
+  <% if flash[:error] %>
+    <h2><%= flash[:error] %></h2>
+  <% else %>
+    <%= react_component('MuttDisplay', { url: "/mutts" }, { id: "mutt-display" } ) %>
   <% end %>
+
 </div>

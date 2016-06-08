@@ -1,7 +1,11 @@
 <h1><%= @mutt.name %></h1>
 
-<% photo = @mutt.photos.find_by(profile: true) || mutt.photos.first %>
-<p><%= image_tag photo.image.url(:medium) %></p>
+<% photo = @mutt.photos.find_by(profile: true) || @mutt.photos.first %>
+<% if photo %>
+  <p><%= image_tag photo.image.url(:medium) %></p>
+<% else %>
+  <p>No photos for this mutt</p>
+<% end %>
 
 <h3><%= @mutt.name %>'s Photos</h3>
 
