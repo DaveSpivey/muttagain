@@ -1,0 +1,27 @@
+<h2>Welcome <%= current_user.name %>!</h2>
+
+<% if flash[:error] %>
+  <h2><%= flash[:error] %><h2>
+<% else %>
+  <h2 id="your-mutts">Your Mutts:</h2>
+<% end %>
+
+<% if current_user.mutts %>
+  <% current_user.mutts.each do |mutt| %>
+    <p><a href="/mutts/<%= mutt.id %>"><%= mutt.name %></a></p>
+    <% photo = mutt.photos.find_by(profile: true) || mutt.photos.first %>
+    <% if photo %>
+      <p><%= image_tag photo.image.url(:medium) %></p>
+    <% else %>
+      <p>No photos for this mutt</p>
+    <% end %>
+  <% end %>
+<% end %>
+
+<!-- <form id="new-mutt" method="GET" action="/mutts/new">
+  <input type="submit" value="Add a New Mutt">
+</form> -->
+
+<%= form_for :mutt, url: new_mutt_path, method: :get do |f| %>
+  <%= f.submit "Add a New Mutt" %>
+<% end %>

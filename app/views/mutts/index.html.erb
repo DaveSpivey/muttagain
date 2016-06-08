@@ -1,0 +1,10 @@
+<div>
+  <p>and here's mutts#index</p>
+
+  <% if flash[:error] %>
+    <h2><%= flash[:error] %></h2>
+  <% else %>
+    <%= react_component('MuttDisplay', { url: "/mutts" }, { id: "mutt-display" } ) %>
+  <% end %>
+
+</div>

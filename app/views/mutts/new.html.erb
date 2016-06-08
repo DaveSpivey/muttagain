@@ -1,0 +1,8 @@
+<h1>Add a New Mutt</h1>
+
+<%= form_for :mutt, url: '/mutts' do |f| %>
+
+  Name: <%= f.text_field :name %>
+  <%= f.submit "Add Mutt!" %>
+
+<% end %>

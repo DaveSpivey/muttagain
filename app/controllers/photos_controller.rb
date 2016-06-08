@@ -1,15 +1,25 @@
 class PhotosController < ApplicationController
 
   def new
-    @photo = Photo.new
+    @mutt = Mutt.find(params[:mutt_id])
+    @photo = @mutt.photos.build
   end
 
   def create
-    @photo = Photo.new(photo_params)
+    @mutt = Mutt.find(params[:mutt_id])
+    @photo = @mutt.photos.build(photo_params)
     if @photo.save
-      flash[:success] = "The photo was added!"
+      flash[:success] = "New photo added!"
+      if @photo.profile
+        @mutt.photos.except(id: @photo.id).each do |photo|
+          photo.profile = false
+        end
+      elsif @mutt.photos.where(profile: true).empty?
+        @mutt.photos.first.profile = true
+      end
       redirect_to root_path
     else
+      flash[:error] = "Photo could not be uploaded"
       render 'new'
     end
   end
@@ -17,6 +27,6 @@ class PhotosController < ApplicationController
   private
 
   def photo_params
-    params.require(:photo).permit(:image)
+    params.require(:photo).permit(:image, :profile)
   end
 end
