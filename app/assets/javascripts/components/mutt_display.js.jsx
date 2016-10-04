@@ -36,6 +36,9 @@ var MuttDisplay = React.createClass({
         <Carousel data={ this.state.data } />
         <a href='#' id='previous' onClick={ this.handleFlip }>Previous</a>
         <a href='#' id='next' onClick={ this.handleFlip }>Next</a>
+        <div>
+          <GuessBox data={{ breeds: this.breeds, muttId: this.state.muttId }} />
+        </div>
       </div>
       );
   }

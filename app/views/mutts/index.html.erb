@@ -4,7 +4,7 @@
   <% if flash[:error] %>
     <h2><%= flash[:error] %></h2>
   <% else %>
-    <%= react_component('MuttDisplay', { url: "/mutts" }, { id: "mutt-display" } ) %>
+    <%= react_component('MuttDisplay', { url: "/mutts", breeds: @breeds }, { id: "mutt-display" } ) %>
   <% end %>
 
 </div>
