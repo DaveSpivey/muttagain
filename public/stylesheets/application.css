@@ -1,8 +1,32 @@
-#mutt-display {
-  border: dashed blue 4px; }
+body {
+  margin: 0; }
 
-.header {
-  background-color: #EEE; }
+#mutt-display {
+  border: dashed blue 1px;
+  padding: 2rem; }
+
+.nav-bar {
+  background-color: #EEE;
+  padding: 0.5rem; }
+  .nav-bar .muttwhat {
+    font-size: 2rem;
+    letter-spacing: 0.25rem;
+    margin-left: 0.5rem; }
+  .nav-bar .nav-link-list {
+    float: right;
+    margin-top: 0.5rem; }
+  .nav-bar .nav-link {
+    color: #444;
+    text-decoration: none;
+    margin-right: 1rem; }
 
 .slideshow {
-  display: initial; }
+  margin: 0 auto;
+  width: 75%; }
+  .slideshow .slick-list {
+    padding: 0.5rem; }
+    .slideshow .slick-list img {
+      height: 100%;
+      margin: 0 auto; }
+  .slideshow .slick-next, .slideshow .slick-prev {
+    background: #AAA; }

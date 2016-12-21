@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import Carousel from './carousel.jsx';
+// import Carousel from './carousel.jsx';
+import Slider from 'react-slick';
 import GuessBox from './guess_box.jsx';
 
 export default class MuttDisplay extends React.Component {
@@ -29,14 +30,9 @@ export default class MuttDisplay extends React.Component {
     });
   }
 
-  handleFlip(e) {
-    let slideIndex = this.state.currentSlide;
-    if (e.target.id == 'previous' && slideIndex > 0) {
-      slideIndex --;
-    } else if (e.target.id == 'next' && slideIndex < this.state.slides.length - 1) {
-      slideIndex ++;
-    };
-    this.setState({ currentSlide: slideIndex })
+  handleFlip(index) {
+    console.log('index', index);
+    this.setState({ currentSlide: index })
   }
 
   render() {
@@ -44,12 +40,22 @@ export default class MuttDisplay extends React.Component {
     const { breeds } = this.props;
     const currentMutt = slides[currentSlide];
     console.log("currentMutt", currentMutt);
+    const settings = {
+      dots: true,
+      afterChange: this.handleFlip
+    };
+    const slideshow = slides.map((slide, idx) => {
+      return <div key={idx}><img src={slide.photoUrl} /></div>
+    })
+    console.log('currentMutt', currentMutt);
+
     return (
       <div>
-        <Carousel photoUrl={ currentMutt.photoUrl }
-                  muttName={ currentMutt.muttName } />
-        <a href='#' id='previous' onClick={ this.handleFlip }>Previous</a>
-        <a href='#' id='next' onClick={ this.handleFlip }>Next</a>
+        <div className="slideshow">
+          <Slider {...settings}>
+            { slideshow }
+          </Slider>
+        </div>
         <div>
           <GuessBox breeds={ breeds }
                     muttId={ currentMutt.muttId } />
@@ -58,3 +64,7 @@ export default class MuttDisplay extends React.Component {
     );
   }
 };
+// <Carousel photoUrl={ currentMutt.photoUrl }
+                  // muttName={ currentMutt.muttName } />
+        //           <a href='#' id='previous' onClick={ this.handleFlip }>Previous</a>
+        // <a href='#' id='next' onClick={ this.handleFlip }>Next</a>

@@ -1,3 +1,14 @@
 .slideshow {
-  display: initial;
+  margin: 0 auto;
+  width: 75%;
+  .slick-list {
+    padding: 0.5rem;
+    img {
+      height: 100%;
+      margin: 0 auto;
+    }
+  }
+  .slick-next, .slick-prev {
+    background: #AAA;
+  }
 }
