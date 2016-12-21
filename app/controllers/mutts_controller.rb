@@ -1,8 +1,10 @@
 class MuttsController < ApplicationController
+  helper ReactHelper
 
   before_action :set_mutt, only: [:show, :edit, :update, :destroy]
 
   def index
+    @breeds = Breed.all
     @photos = Photo.where(profile: true)
     if @photos.empty?
       flash[:error] = "No mutt photos!"
