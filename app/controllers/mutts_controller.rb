@@ -1,4 +1,5 @@
 class MuttsController < ApplicationController
+  helper ReactHelper
 
   before_action :set_mutt, only: [:show, :edit, :update, :destroy]
 
