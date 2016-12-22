@@ -1,6 +1,5 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-// import Carousel from './carousel.jsx';
 import Slider from 'react-slick';
 import GuessBox from './guess_box.jsx';
 
@@ -31,7 +30,6 @@ export default class MuttDisplay extends React.Component {
   }
 
   handleFlip(index) {
-    console.log('index', index);
     this.setState({ currentSlide: index })
   }
 
@@ -39,32 +37,32 @@ export default class MuttDisplay extends React.Component {
     const { slides, currentSlide } = this.state;
     const { breeds } = this.props;
     const currentMutt = slides[currentSlide];
-    console.log("currentMutt", currentMutt);
-    const settings = {
-      dots: true,
-      afterChange: this.handleFlip
-    };
     const slideshow = slides.map((slide, idx) => {
       return <div key={idx}><img src={slide.photoUrl} /></div>
     })
     console.log('currentMutt', currentMutt);
+    const settings = {
+      dots: false,
+      afterChange: this.handleFlip
+    };
 
     return (
       <div>
-        <div className="slideshow">
-          <Slider {...settings}>
-            { slideshow }
-          </Slider>
+        <div className="row">
+          <div className="slideshow small-8 small-offset-2 columns">
+            <Slider {...settings}>
+              { slideshow }
+            </Slider>
+            <h3 className="mutt-name">{ currentMutt.muttName }</h3>
+          </div>
         </div>
-        <div>
-          <GuessBox breeds={ breeds }
-                    muttId={ currentMutt.muttId } />
+        <div className="row">
+          <div className="small-3 small-offset-9 columns">
+            <GuessBox breeds={ breeds }
+                      muttId={ currentMutt.muttId } />
+          </div>
         </div>
       </div>
     );
   }
 };
-// <Carousel photoUrl={ currentMutt.photoUrl }
-                  // muttName={ currentMutt.muttName } />
-        //           <a href='#' id='previous' onClick={ this.handleFlip }>Previous</a>
-        // <a href='#' id='next' onClick={ this.handleFlip }>Next</a>

@@ -39739,8 +39739,6 @@
 	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-	// import Carousel from './carousel.jsx';
-
 
 	var MuttDisplay = function (_React$Component) {
 	  _inherits(MuttDisplay, _React$Component);
@@ -39777,7 +39775,6 @@
 	  }, {
 	    key: 'handleFlip',
 	    value: function handleFlip(index) {
-	      console.log('index', index);
 	      this.setState({ currentSlide: index });
 	    }
 	  }, {
@@ -39789,11 +39786,6 @@
 	      var breeds = this.props.breeds;
 
 	      var currentMutt = slides[currentSlide];
-	      console.log("currentMutt", currentMutt);
-	      var settings = {
-	        dots: true,
-	        afterChange: this.handleFlip
-	      };
 	      var slideshow = slides.map(function (slide, idx) {
 	        return _react2.default.createElement(
 	          'div',
@@ -39802,24 +39794,41 @@
 	        );
 	      });
 	      console.log('currentMutt', currentMutt);
+	      var settings = {
+	        dots: false,
+	        afterChange: this.handleFlip
+	      };
 
 	      return _react2.default.createElement(
 	        'div',
 	        null,
 	        _react2.default.createElement(
 	          'div',
-	          { className: 'slideshow' },
+	          { className: 'row' },
 	          _react2.default.createElement(
-	            _reactSlick2.default,
-	            settings,
-	            slideshow
+	            'div',
+	            { className: 'slideshow small-8 small-offset-2 columns' },
+	            _react2.default.createElement(
+	              _reactSlick2.default,
+	              settings,
+	              slideshow
+	            ),
+	            _react2.default.createElement(
+	              'h3',
+	              { className: 'mutt-name' },
+	              currentMutt.muttName
+	            )
 	          )
 	        ),
 	        _react2.default.createElement(
 	          'div',
-	          null,
-	          _react2.default.createElement(_guess_box2.default, { breeds: breeds,
-	            muttId: currentMutt.muttId })
+	          { className: 'row' },
+	          _react2.default.createElement(
+	            'div',
+	            { className: 'small-3 small-offset-9 columns' },
+	            _react2.default.createElement(_guess_box2.default, { breeds: breeds,
+	              muttId: currentMutt.muttId })
+	          )
 	        )
 	      );
 	    }
@@ -39830,10 +39839,6 @@
 
 	exports.default = MuttDisplay;
 	;
-	// <Carousel photoUrl={ currentMutt.photoUrl }
-	// muttName={ currentMutt.muttName } />
-	//           <a href='#' id='previous' onClick={ this.handleFlip }>Previous</a>
-	// <a href='#' id='next' onClick={ this.handleFlip }>Next</a>
 
 /***/ },
 /* 479 */
