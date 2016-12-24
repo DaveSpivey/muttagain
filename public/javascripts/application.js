@@ -39754,6 +39754,11 @@
 	    };
 
 	    _this.handleFlip = _this.handleFlip.bind(_this);
+	    _this.handleGuess = _this.handleGuess.bind(_this);
+	    _this.slideshowSettings = {
+	      dots: false,
+	      afterChange: _this.handleFlip
+	    };
 	    return _this;
 	  }
 
@@ -39778,14 +39783,44 @@
 	      this.setState({ currentSlide: index });
 	    }
 	  }, {
-	    key: 'render',
-	    value: function render() {
+	    key: 'handleGuess',
+	    value: function handleGuess() {
+	      var box = document.getElementById("guess-box");
+	      var breedId = box.options[box.selectedIndex].value;
 	      var _state = this.state,
 	          slides = _state.slides,
 	          currentSlide = _state.currentSlide;
+
+	      var currentMutt = slides[currentSlide];
+	      var breeds = this.props.breeds;
+
+
+	      $.ajax({
+	        type: "POST",
+	        url: "/mutts/" + currentMutt.muttId + "/guesses",
+	        data: { breedId: breedId },
+	        success: function success(data) {
+	          console.log("data", data);
+	          var guessedBreed = breeds.filter(function (breed) {
+	            return breed.id == data.breed_id;
+	          });
+	          console.log("guessedBreed", guessedBreed);
+	        },
+	        error: function error(xhr, status, err) {
+	          console.error(status, err.toString());
+	        }
+	      });
+	    }
+	  }, {
+	    key: 'render',
+	    value: function render() {
+	      var _state2 = this.state,
+	          slides = _state2.slides,
+	          currentSlide = _state2.currentSlide;
 	      var breeds = this.props.breeds;
 
 	      var currentMutt = slides[currentSlide];
+
 	      var slideshow = slides.map(function (slide, idx) {
 	        return _react2.default.createElement(
 	          'div',
@@ -39793,11 +39828,6 @@
 	          _react2.default.createElement('img', { src: slide.photoUrl })
 	        );
 	      });
-	      console.log('currentMutt', currentMutt);
-	      var settings = {
-	        dots: false,
-	        afterChange: this.handleFlip
-	      };
 
 	      return _react2.default.createElement(
 	        'div',
@@ -39810,7 +39840,7 @@
 	            { className: 'slideshow small-8 small-offset-2 columns' },
 	            _react2.default.createElement(
 	              _reactSlick2.default,
-	              settings,
+	              this.slideshowSettings,
 	              slideshow
 	            ),
 	            _react2.default.createElement(
@@ -39827,7 +39857,8 @@
 	            'div',
 	            { className: 'small-3 small-offset-9 columns' },
 	            _react2.default.createElement(_guess_box2.default, { breeds: breeds,
-	              muttId: currentMutt.muttId })
+	              muttId: currentMutt.muttId,
+	              handleGuess: this.handleGuess })
 	          )
 	        )
 	      );
@@ -42113,7 +42144,8 @@
 	    value: function render() {
 	      var _props = this.props,
 	          breeds = _props.breeds,
-	          muttId = _props.muttId;
+	          muttId = _props.muttId,
+	          handleGuess = _props.handleGuess;
 
 	      return _react2.default.createElement(
 	        'div',
@@ -42128,12 +42160,12 @@
 	          null,
 	          _react2.default.createElement(
 	            'select',
-	            null,
+	            { id: 'guess-box', onChange: handleGuess },
 	            breeds.map(function (breed) {
 	              return _react2.default.createElement(
 	                'option',
 	                { key: breed.id,
-	                  value: breed.name },
+	                  value: breed.id },
 	                breed.name
 	              );
 	            })
