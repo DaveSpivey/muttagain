@@ -1,6 +1,6 @@
 class Mutt < ActiveRecord::Base
   belongs_to :owner, class_name: :user
-  has_many :guesses, foreign_key: :mutt_id
+  has_many :guesses, foreign_key: :mutt_id, dependent: :destroy
   has_many :photos, foreign_key: :mutt_id, dependent: :destroy
 
   # def what

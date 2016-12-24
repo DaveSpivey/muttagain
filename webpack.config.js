@@ -13,7 +13,6 @@ module.exports = {
 
   entry: {
     application: ["./javascripts/application.js", "./stylesheets/main.scss"]
-    // application: "./javascripts/application.js"
   },
 
   output: {
@@ -34,7 +33,7 @@ module.exports = {
       {
         test: /\.scss$/,
         loader: ExtractTextPlugin.extract("css!sass")
-      },
+      }
     ]
   },
 
