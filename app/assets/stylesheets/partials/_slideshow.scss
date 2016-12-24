@@ -1,0 +1,25 @@
+.slideshow {
+  // margin: 0 auto;
+  width: 75%;
+  height: 55vh;
+  .slick-slider {
+    height: 100%;
+    .slick-track {
+      height: 100%;
+    }
+  }
+  .slick-list {
+    height: 100%;
+    padding: 0.5rem;
+    img {
+      height: 100%;
+      margin: 0 auto;
+    }
+  }
+  .slick-next, .slick-prev {
+    background: #AAA;
+  }
+  .mutt-name {
+    text-align: center;
+  }
+}

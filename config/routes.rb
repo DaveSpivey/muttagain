@@ -13,6 +13,7 @@ Rails.application.routes.draw do
 
   resources :mutts do
     resources :photos
+    resources :guesses
   end
 
   resources :adoptables

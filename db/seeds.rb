@@ -1,7 +1,16 @@
-# This file should contain all the record creation needed to seed the database with its default values.
-# The data can then be loaded with the rake db:seed (or created alongside the db with db:setup).
-#
-# Examples:
-#
-#   cities = City.create([{ name: 'Chicago' }, { name: 'Copenhagen' }])
-#   Mayor.create(name: 'Emanuel', city: cities.first)
+page = HTTParty.get('https://en.wikipedia.org/wiki/List_of_dog_breeds_recognized_by_the_American_Kennel_Club', :verify => false)
+
+parse_page = Nokogiri::HTML(page)
+
+dogs = {}
+parse_page.css("#mw-content-text > ul").each do |group|
+  group.css('li a').each do |dog|
+    break if dog.text == "List of dog breeds"
+    break if dog['rel'] == "nofollow"
+    dogs[dog.text] = dog['href']
+  end
+end
+
+dogs.each do |breed, href|
+  Breed.create(name: breed, link: "https://en.wikipedia.org#{href}")
+end
