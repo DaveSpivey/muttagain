@@ -1,5 +1,16 @@
 class GuessesController < ApplicationController
 
+  def index
+    @guesses = Guess.where(mutt_id: params[:mutt_id])
+    p "============================"
+    p @guesses
+    respond_to do |format|
+      format.html
+      format.js
+      format.json { render json: @guesses }
+    end
+  end
+
   def show
   end
 

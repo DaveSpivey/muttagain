@@ -10,9 +10,22 @@ class MuttsController < ApplicationController
       flash[:error] = "No mutt photos!"
     else
       mutts = {}
-      mutts["photos"] = @photos.map do |pic|
+      mutts["slides"] = @photos.map do |pic|
         mutt = Mutt.find(pic.mutt_id)
-        { photoId: pic.id, photoUrl: pic.image.url(:large), muttId: mutt.id, muttName: mutt.name }
+        guessed_breeds = {}
+        mutt.guesses.each do |guess|
+          breed = Breed.find(guess.breed_id)
+          if !guessed_breeds.has_key? breed.name
+            guessed_breeds[breed.name] = {
+              link: breed.link,
+              frequency: 1
+            }
+          else
+            guessed_breeds[breed.name][:frequency] += 1
+          end
+        end
+
+        { photoId: pic.id, photoUrl: pic.image.url(:large), muttId: mutt.id, muttName: mutt.name, muttGuesses: guessed_breeds }
       end
     end
 

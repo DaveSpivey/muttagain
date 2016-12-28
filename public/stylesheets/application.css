@@ -37,3 +37,6 @@ body {
     background: #AAA; }
   .slideshow .mutt-name {
     text-align: center; }
+
+.guess .guess-item {
+  list-style: none; }

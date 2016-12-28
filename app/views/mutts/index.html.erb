@@ -1,12 +1,7 @@
-<div>
-  <p>and here's mutts#index</p>
-
-  <div id="mutt-display">
-    <% if flash[:error] %>
-      <h2><%= flash[:error] %></h2>
-    <% else %>
-      <%= react_component('MuttDisplay', props: { breeds: @breeds }) %>
-    <% end %>
-  </div>
-
+<div id="mutt-display">
+  <% if flash[:error] %>
+    <h2><%= flash[:error] %></h2>
+  <% else %>
+    <%= react_component('MuttDisplay', props: { breeds: @breeds }) %>
+  <% end %>
 </div>
