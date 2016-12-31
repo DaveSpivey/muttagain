@@ -1,4 +1,11 @@
 class UsersController < ApplicationController
+  helper ReactHelper
+
+  before_action :set_user, only: [:show, :edit, :update, :destroy]
+
+  def show
+    @profile = @user == current_user
+  end
 
   def new
   end
@@ -14,6 +21,10 @@ class UsersController < ApplicationController
   end
 
 private
+
+  def set_user
+    @user = User.find(params[:id])
+  end
 
   def user_params
     params.require(:user).permit(:name, :email, :password, :password_confirmation)
