@@ -45,7 +45,7 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	__webpack_require__(1);
-	module.exports = __webpack_require__(497);
+	module.exports = __webpack_require__(499);
 
 
 /***/ },
@@ -31748,6 +31748,7 @@
 	// Manually add components to window and global
 	// so that react_ujs and react-server can find them and render them.
 	window.MuttDisplay = global.MuttDisplay = __webpack_require__(478).default;
+	window.ProfilePage = global.ProfilePage = __webpack_require__(498).default;
 	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
 
 /***/ },
@@ -39728,9 +39729,13 @@
 
 	var _reactSlick2 = _interopRequireDefault(_reactSlick);
 
-	var _guess_box = __webpack_require__(496);
+	var _guessSelect = __webpack_require__(496);
 
-	var _guess_box2 = _interopRequireDefault(_guess_box);
+	var _guessSelect2 = _interopRequireDefault(_guessSelect);
+
+	var _guessDisplay = __webpack_require__(497);
+
+	var _guessDisplay2 = _interopRequireDefault(_guessDisplay);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -39749,7 +39754,7 @@
 	    var _this = _possibleConstructorReturn(this, (MuttDisplay.__proto__ || Object.getPrototypeOf(MuttDisplay)).call(this, props));
 
 	    _this.state = {
-	      slides: [{ photoUrl: '', muttName: '' }],
+	      slides: [{ photoUrl: '', muttName: '', muttGuesses: {} }],
 	      currentSlide: 0
 	    };
 
@@ -39770,7 +39775,7 @@
 	        dataType: 'json',
 	        cache: false,
 	        success: function (data) {
-	          this.setState({ slides: data.photos });
+	          this.setState({ slides: data.slides });
 	        }.bind(this),
 	        error: function (xhr, status, err) {
 	          console.error(status, err.toString());
@@ -39785,8 +39790,8 @@
 	  }, {
 	    key: 'handleGuess',
 	    value: function handleGuess() {
-	      var box = document.getElementById("guess-box");
-	      var breedId = box.options[box.selectedIndex].value;
+	      var selector = document.getElementById("guess-select");
+	      var breedId = selector.options[selector.selectedIndex].value;
 	      var _state = this.state,
 	          slides = _state.slides,
 	          currentSlide = _state.currentSlide;
@@ -39800,11 +39805,9 @@
 	        url: "/mutts/" + currentMutt.muttId + "/guesses",
 	        data: { breedId: breedId },
 	        success: function success(data) {
-	          console.log("data", data);
-	          var guessedBreed = breeds.filter(function (breed) {
+	          var guessedBreed = breeds.find(function (breed) {
 	            return breed.id == data.breed_id;
 	          });
-	          console.log("guessedBreed", guessedBreed);
 	        },
 	        error: function error(xhr, status, err) {
 	          console.error(status, err.toString());
@@ -39828,6 +39831,7 @@
 	          _react2.default.createElement('img', { src: slide.photoUrl })
 	        );
 	      });
+	      // console.log("currentMutt", currentMutt);
 
 	      return _react2.default.createElement(
 	        'div',
@@ -39852,11 +39856,17 @@
 	        ),
 	        _react2.default.createElement(
 	          'div',
-	          { className: 'row' },
+	          { className: 'row guess' },
 	          _react2.default.createElement(
 	            'div',
-	            { className: 'small-3 small-offset-9 columns' },
-	            _react2.default.createElement(_guess_box2.default, { breeds: breeds,
+	            { className: 'small-7 columns' },
+	            _react2.default.createElement(_guessDisplay2.default, { muttId: currentMutt.muttId,
+	              guesses: currentMutt.muttGuesses })
+	          ),
+	          _react2.default.createElement(
+	            'div',
+	            { className: 'small-3 small-offset-2 columns' },
+	            _react2.default.createElement(_guessSelect2.default, { breeds: breeds,
 	              muttId: currentMutt.muttId,
 	              handleGuess: this.handleGuess })
 	          )
@@ -42130,16 +42140,16 @@
 
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-	var GuessBox = function (_React$Component) {
-	  _inherits(GuessBox, _React$Component);
+	var GuessSelect = function (_React$Component) {
+	  _inherits(GuessSelect, _React$Component);
 
-	  function GuessBox() {
-	    _classCallCheck(this, GuessBox);
+	  function GuessSelect() {
+	    _classCallCheck(this, GuessSelect);
 
-	    return _possibleConstructorReturn(this, (GuessBox.__proto__ || Object.getPrototypeOf(GuessBox)).apply(this, arguments));
+	    return _possibleConstructorReturn(this, (GuessSelect.__proto__ || Object.getPrototypeOf(GuessSelect)).apply(this, arguments));
 	  }
 
-	  _createClass(GuessBox, [{
+	  _createClass(GuessSelect, [{
 	    key: 'render',
 	    value: function render() {
 	      var _props = this.props,
@@ -42160,7 +42170,7 @@
 	          null,
 	          _react2.default.createElement(
 	            'select',
-	            { id: 'guess-box', onChange: handleGuess },
+	            { id: 'guess-select', onChange: handleGuess },
 	            breeds.map(function (breed) {
 	              return _react2.default.createElement(
 	                'option',
@@ -42175,19 +42185,253 @@
 	    }
 	  }]);
 
-	  return GuessBox;
+	  return GuessSelect;
 	}(_react2.default.Component);
 
-	exports.default = GuessBox;
+	exports.default = GuessSelect;
 	;
 
-	GuessBox.defaultProps = {
+	GuessSelect.defaultProps = {
 	  breeds: [],
 	  muttId: ''
 	};
 
 /***/ },
 /* 497 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _react = __webpack_require__(3);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _reactDom = __webpack_require__(34);
+
+	var _reactDom2 = _interopRequireDefault(_reactDom);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var GuessDisplay = function (_React$Component) {
+	  _inherits(GuessDisplay, _React$Component);
+
+	  function GuessDisplay() {
+	    _classCallCheck(this, GuessDisplay);
+
+	    return _possibleConstructorReturn(this, (GuessDisplay.__proto__ || Object.getPrototypeOf(GuessDisplay)).apply(this, arguments));
+	  }
+
+	  _createClass(GuessDisplay, [{
+	    key: 'getTopGuesses',
+	    value: function getTopGuesses(guesses) {
+	      var guessList = Object.keys(guesses).map(function (guessName) {
+	        var currentGuess = guesses[guessName];
+	        return {
+	          name: guessName,
+	          link: currentGuess.link,
+	          frequency: currentGuess.frequency
+	        };
+	      });
+	      var topGuesses = guessList.sort(function (a, b) {
+	        return b.frequency - a.frequency;
+	      }).slice(0, 3);
+
+	      return topGuesses.map(function (guess) {
+	        return _react2.default.createElement(
+	          'li',
+	          { key: guess.name, className: 'guess-item' },
+	          _react2.default.createElement(
+	            'a',
+	            { href: guess.link },
+	            guess.name + ", " + guess.frequency
+	          )
+	        );
+	      });
+	    }
+	  }, {
+	    key: 'render',
+	    value: function render() {
+	      var _props = this.props,
+	          muttId = _props.muttId,
+	          guesses = _props.guesses;
+
+	      var guessList = this.getTopGuesses(guesses);
+	      return _react2.default.createElement(
+	        'div',
+	        null,
+	        'GuessDisplay muttId: ',
+	        muttId,
+	        _react2.default.createElement(
+	          'p',
+	          null,
+	          'Top 3 guesses:'
+	        ),
+	        _react2.default.createElement(
+	          'ul',
+	          null,
+	          guessList
+	        )
+	      );
+	    }
+	  }]);
+
+	  return GuessDisplay;
+	}(_react2.default.Component);
+
+	exports.default = GuessDisplay;
+	;
+
+/***/ },
+/* 498 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _react = __webpack_require__(3);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _reactDom = __webpack_require__(34);
+
+	var _reactDom2 = _interopRequireDefault(_reactDom);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var ProfilePage = function (_React$Component) {
+	  _inherits(ProfilePage, _React$Component);
+
+	  function ProfilePage() {
+	    _classCallCheck(this, ProfilePage);
+
+	    return _possibleConstructorReturn(this, (ProfilePage.__proto__ || Object.getPrototypeOf(ProfilePage)).apply(this, arguments));
+	  }
+
+	  _createClass(ProfilePage, [{
+	    key: 'handleEdit',
+	    value: function handleEdit(e) {
+	      e.preventDefault();
+	      console.log(e.target);
+	    }
+	  }, {
+	    key: 'handleDelete',
+	    value: function handleDelete(e) {
+	      e.preventDefault();
+	      console.log(e.target);
+	    }
+	  }, {
+	    key: 'getMuttProfiles',
+	    value: function getMuttProfiles() {
+	      var _this2 = this;
+
+	      var _props = this.props,
+	          mutts = _props.mutts,
+	          profilePhotos = _props.profilePhotos;
+
+	      var emptyPicMessage = "No photos yet for this mutt";
+	      var muttProfiles = mutts.map(function (mutt) {
+	        var muttPhoto = void 0;
+	        profilePhotos.forEach(function (photo) {
+	          if (photo.muttId == mutt.id) {
+	            muttPhoto = photo.photo ? _react2.default.createElement(
+	              'a',
+	              { href: '/mutts/' + mutt.id },
+	              _react2.default.createElement('img', { src: photo.photo })
+	            ) : _react2.default.createElement(
+	              'p',
+	              null,
+	              emptyPicMessage
+	            );
+	          }
+	        });
+	        return _react2.default.createElement(
+	          'div',
+	          { className: 'muttProfile', key: 'mutt' + mutt.id },
+	          _react2.default.createElement(
+	            'a',
+	            { href: '/mutts/' + mutt.id },
+	            _react2.default.createElement(
+	              'p',
+	              null,
+	              mutt.name
+	            )
+	          ),
+	          muttPhoto,
+	          _react2.default.createElement(
+	            'div',
+	            { className: 'button-multi' },
+	            _react2.default.createElement(
+	              'a',
+	              { className: 'button tiny mutton edit-button',
+	                href: '/mutts/' + mutt.id + '/edit',
+	                onClick: _this2.handleEdit
+	              },
+	              'Edit'
+	            ),
+	            _react2.default.createElement(
+	              'a',
+	              { className: 'button tiny mutton delete-button',
+	                href: '/mutts/' + mutt.id + '/destroy',
+	                onClick: _this2.handleDelete
+	              },
+	              'Delete'
+	            )
+	          )
+	        );
+	      });
+	      return muttProfiles;
+	    }
+	  }, {
+	    key: 'render',
+	    value: function render() {
+	      var user = this.props.user;
+
+	      var muttProfiles = this.getMuttProfiles();
+	      return _react2.default.createElement(
+	        'div',
+	        null,
+	        _react2.default.createElement(
+	          'h2',
+	          null,
+	          'Welcome, ',
+	          user.name,
+	          '!'
+	        ),
+	        muttProfiles
+	      );
+	    }
+	  }]);
+
+	  return ProfilePage;
+	}(_react2.default.Component);
+
+	exports.default = ProfilePage;
+
+/***/ },
+/* 499 */
 /***/ function(module, exports) {
 
 	// removed by extract-text-webpack-plugin

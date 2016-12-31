@@ -1,14 +1,15 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import Slider from 'react-slick';
-import GuessBox from './guess_box.jsx';
+import GuessSelect from './guessSelect.jsx';
+import GuessDisplay from './guessDisplay.jsx';
 
 export default class MuttDisplay extends React.Component {
 
   constructor(props) {
     super(props);
     this.state = {
-      slides: [{ photoUrl: '', muttName: '' }],
+      slides: [{ photoUrl: '', muttName: '', muttGuesses: {} }],
       currentSlide: 0
     };
 
@@ -26,7 +27,7 @@ export default class MuttDisplay extends React.Component {
       dataType: 'json',
       cache: false,
       success: function(data) {
-        this.setState({ slides: data.photos });
+        this.setState({ slides: data.slides });
       }.bind(this),
       error: function(xhr, status, err) {
         console.error(status, err.toString());
@@ -39,8 +40,8 @@ export default class MuttDisplay extends React.Component {
   }
 
   handleGuess() {
-    const box = document.getElementById("guess-box");
-    const breedId = box.options[box.selectedIndex].value;
+    const selector = document.getElementById("guess-select");
+    const breedId = selector.options[selector.selectedIndex].value;
     const { slides, currentSlide } = this.state;
     const currentMutt = slides[currentSlide];
     const { breeds } = this.props;
@@ -50,11 +51,9 @@ export default class MuttDisplay extends React.Component {
       url: "/mutts/" + currentMutt.muttId + "/guesses",
       data: { breedId: breedId },
       success: function(data) {
-        console.log("data", data);
-        const guessedBreed = breeds.filter((breed) => {
+        const guessedBreed = breeds.find((breed) => {
           return breed.id == data.breed_id
         })
-        console.log("guessedBreed", guessedBreed);
       },
       error: function(xhr, status, err) {
         console.error(status, err.toString());
@@ -70,6 +69,7 @@ export default class MuttDisplay extends React.Component {
     const slideshow = slides.map((slide, idx) => {
       return <div key={idx}><img src={slide.photoUrl} /></div>
     });
+    // console.log("currentMutt", currentMutt);
 
     return (
       <div>
@@ -81,9 +81,13 @@ export default class MuttDisplay extends React.Component {
             <h3 className="mutt-name">{ currentMutt.muttName }</h3>
           </div>
         </div>
-        <div className="row">
-          <div className="small-3 small-offset-9 columns">
-            <GuessBox breeds={ breeds }
+        <div className="row guess">
+          <div className="small-7 columns">
+            <GuessDisplay muttId={ currentMutt.muttId }
+                          guesses={ currentMutt.muttGuesses } />
+          </div>
+          <div className="small-3 small-offset-2 columns">
+            <GuessSelect breeds={ breeds }
                       muttId={ currentMutt.muttId }
                       handleGuess={ this.handleGuess } />
           </div>

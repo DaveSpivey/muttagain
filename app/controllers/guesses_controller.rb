@@ -1,6 +1,12 @@
 class GuessesController < ApplicationController
 
-  def show
+  def index
+    @guesses = Guess.where(mutt_id: params[:mutt_id])
+    respond_to do |format|
+      format.html
+      format.js
+      format.json { render json: @guesses }
+    end
   end
 
   def create
@@ -16,9 +22,9 @@ class GuessesController < ApplicationController
     end
   end
 
-  private
+  # private
 
-  def guess_params
-    params.require(:guess).permit(:user_id, :mutt_id, :value)
-  end
+  # def guess_params
+  #   params.require(:guess).permit(:user_id, :mutt_id, :value)
+  # end
 end

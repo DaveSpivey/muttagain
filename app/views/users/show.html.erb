@@ -1,27 +1,47 @@
-<h2>Welcome <%= current_user.name %>!</h2>
+<div id="profile-page">
+  <% if flash[:error] %>
+    <h2><%= flash[:error] %></h2>
+  <% else %>
+    <% profile_photos = [] %>
+    <% if @user.mutts %>
+      <% @user.mutts.each do |mutt| %>
+        <% photo = mutt.photos.find_by(profile: true) || mutt.photos.first %>
+        <% pic = !mutt.photos.empty? ? photo.image.url(:medium) : nil %>
+        <% profile_photos.push({'photo' => pic, 'muttId' => mutt.id}) %>
+      <% end %>
+    <% end %>
+    <%= react_component('ProfilePage', props: { user: @user, profile: @profile, mutts: @user.mutts, profilePhotos: profile_photos }) %>
+  <% end %>
+</div>
 
-<% if flash[:error] %>
-  <h2><%= flash[:error] %><h2>
-<% else %>
-  <h2 id="your-mutts">Your Mutts:</h2>
-<% end %>
+<% if false %>
 
-<% if current_user.mutts %>
-  <% current_user.mutts.each do |mutt| %>
-    <p><a href="/mutts/<%= mutt.id %>"><%= mutt.name %></a></p>
-    <% photo = mutt.photos.find_by(profile: true) || mutt.photos.first %>
-    <% if photo %>
-      <p><%= image_tag photo.image.url(:medium) %></p>
-    <% else %>
-      <p>No photos for this mutt</p>
+  <% if @profile %>
+    <h2>Welcome <%= current_user.name %>!</h2>
+  <% else %>
+    <h2><%= @user.name %>'s page</h2>
+  <% end %>
+
+  <% if flash[:error] %>
+    <h2><%= flash[:error] %><h2>
+  <% else %>
+    <h2 id="your-mutts">Your Mutts:</h2>
+  <% end %>
+
+  <% if @user.mutts %>
+    <% @user.mutts.each do |mutt| %>
+      <p><a href="/mutts/<%= mutt.id %>"><%= mutt.name %></a></p>
+      <% photo = mutt.photos.find_by(profile: true) || mutt.photos.first %>
+      <% if photo %>
+        <p><%= image_tag photo.image.url(:medium) %></p>
+      <% else %>
+        <p>No photos for this mutt</p>
+      <% end %>
     <% end %>
   <% end %>
-<% end %>
 
-<!-- <form id="new-mutt" method="GET" action="/mutts/new">
-  <input type="submit" value="Add a New Mutt">
-</form> -->
+  <%= form_for :mutt, url: new_mutt_path, method: :get do |f| %>
+    <%= f.submit "Add a New Mutt" %>
+  <% end %>
 
-<%= form_for :mutt, url: new_mutt_path, method: :get do |f| %>
-  <%= f.submit "Add a New Mutt" %>
 <% end %>
