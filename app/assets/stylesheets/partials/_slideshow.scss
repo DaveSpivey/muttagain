@@ -1,7 +1,13 @@
+.slideshow-wrapper {
+  padding-top: 1rem;
+  // margin-right: 2rem;
+}
 .slideshow {
-  // margin: 0 auto;
-  width: 75%;
-  height: 55vh;
+  height: 50vh;
+  margin-bottom: 3rem;
+  @media (min-width: 400px) {
+    padding: 0 3rem;
+  }
   .slick-slider {
     height: 100%;
     .slick-track {
@@ -10,14 +16,55 @@
   }
   .slick-list {
     height: 100%;
-    padding: 0.5rem;
+    background-color: #EEE;
+    @media (min-width: 600px) {
+      background-color: #FFF;
+    }
     img {
+      // visibility: hidden;
+      padding: 0 0.25rem;
       height: 100%;
       margin: 0 auto;
     }
+    .slick-active > img {
+      // visibility: visible;
+      height: auto;
+      @media (min-width: 600px) {
+        height: 100%;
+      }
+      // margin-left: 0;
+    }
   }
   .slick-next, .slick-prev {
-    background: #AAA;
+    height: 100%;
+    width: 2rem;
+    visibility: hidden;
+    @media (min-width: 600px) {
+      visibility: visible;
+    }
+    &:hover img {
+      background-color: #EEF;
+    }
+    img {
+      height: 4rem;
+      position: absolute;
+      top: 50%;
+      margin-top: -2rem;
+      border-radius: 5px;
+    }
+    &:before {
+      visibility: hidden;
+    }
+  }
+  .slick-next {
+    img {
+      margin-left: -0.5rem;
+    }
+  }
+  .slick-prev {
+    img {
+      margin-left: -1.125rem;
+    }
   }
   .mutt-name {
     text-align: center;

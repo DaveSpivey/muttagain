@@ -1,6 +1,12 @@
 .nav-bar {
-  background-color: #EEE;
+  height: 8vh;
+  // background-color: $blueberry;
+  // background-color: $nytblueberry;
+  background-image: url("../images/black-fur.jpg");
+  background-size: cover;
   padding: 0.5rem;
+  color: #EEE;
+  // color: #444;
   .muttwhat {
     font-size: 2rem;
     letter-spacing: 0.25rem;
@@ -11,8 +17,8 @@
     margin-top: 0.5rem;
   }
   .nav-link {
-    color: #444;
+    color: #EEE;
     text-decoration: none;
-    margin-right: 1rem;
+    margin-right: 2rem;
   }
 }
