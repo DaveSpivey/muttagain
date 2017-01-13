@@ -1,8 +1,9 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import Slider from 'react-slick';
-import GuessSelect from './guessSelect.jsx';
-import GuessDisplay from './guessDisplay.jsx';
+// import Slider from 'react-slick';
+import Slideshow from './Slideshow.jsx';
+import GuessSelect from './GuessSelect.jsx';
+import GuessDisplay from './GuessDisplay.jsx';
 
 export default class MuttDisplay extends React.Component {
 
@@ -15,10 +16,6 @@ export default class MuttDisplay extends React.Component {
 
     this.handleFlip = this.handleFlip.bind(this);
     this.handleGuess = this.handleGuess.bind(this);
-    this.slideshowSettings = {
-      dots: false,
-      afterChange: this.handleFlip
-    };
   }
 
   componentDidMount() {
@@ -40,7 +37,7 @@ export default class MuttDisplay extends React.Component {
   }
 
   handleGuess() {
-    const selector = document.getElementById("guess-select");
+    const selector = document.getElementById("guess-select-input");
     const breedId = selector.options[selector.selectedIndex].value;
     const { slides, currentSlide } = this.state;
     const currentMutt = slides[currentSlide];
@@ -48,7 +45,7 @@ export default class MuttDisplay extends React.Component {
 
     $.ajax({
       type: "POST",
-      url: "/mutts/" + currentMutt.muttId + "/guesses",
+      url: `/mutts/${ currentMutt.muttId }/guesses`,
       data: { breedId: breedId },
       success: function(data) {
         const guessedBreed = breeds.find((breed) => {
@@ -66,30 +63,24 @@ export default class MuttDisplay extends React.Component {
     const { breeds } = this.props;
     const currentMutt = slides[currentSlide];
 
-    const slideshow = slides.map((slide, idx) => {
-      return <div key={idx}><img src={slide.photoUrl} /></div>
-    });
-    // console.log("currentMutt", currentMutt);
-
     return (
-      <div>
-        <div className="row">
-          <div className="slideshow small-8 small-offset-2 columns">
-            <Slider { ...this.slideshowSettings }>
-              { slideshow }
-            </Slider>
-            <h3 className="mutt-name">{ currentMutt.muttName }</h3>
+      <div className="mutt-display-content">
+        <div className="row slide-row">
+          <div className="slideshow-wrapper large-9 medium-12 columns">
+            <Slideshow slides={ slides }
+                       currentSlide={ currentSlide }
+                       handleFlip={ this.handleFlip } />
           </div>
-        </div>
-        <div className="row guess">
-          <div className="small-7 columns">
+          <div className="guess-display-section large-3 medium-12 columns">
             <GuessDisplay muttId={ currentMutt.muttId }
                           guesses={ currentMutt.muttGuesses } />
           </div>
-          <div className="small-3 small-offset-2 columns">
+        </div>
+        <div className="row guess-row">
+          <div className="guess-select medium-9 small-12 columns">
             <GuessSelect breeds={ breeds }
-                      muttId={ currentMutt.muttId }
-                      handleGuess={ this.handleGuess } />
+                         muttId={ currentMutt.muttId }
+                         handleGuess={ this.handleGuess } />
           </div>
         </div>
       </div>

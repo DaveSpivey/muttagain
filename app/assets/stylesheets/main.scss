@@ -1,6 +1,10 @@
+// modules
+@import "modules/variables";
+
 // layouts
 @import "layouts/base";
 @import "layouts/navbar";
+@import "layouts/mutt-display";
 
 // partials
 @import "partials/slideshow";

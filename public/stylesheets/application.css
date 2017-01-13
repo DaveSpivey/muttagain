@@ -1,13 +1,16 @@
 body {
-  margin: 0; }
+  margin: 0;
+  font-family: Futura, sans-serif; }
 
-#mutt-display {
-  border: dashed blue 1px;
-  padding: 2rem; }
+h1, h2, h3, h4, h5, h6 {
+  font-family: Futura, sans-serif; }
 
 .nav-bar {
-  background-color: #EEE;
-  padding: 0.5rem; }
+  height: 8vh;
+  background-image: url(../images/black-fur.jpg);
+  background-size: cover;
+  padding: 0.5rem;
+  color: #EEE; }
   .nav-bar .muttwhat {
     font-size: 2rem;
     letter-spacing: 0.25rem;
@@ -16,30 +19,92 @@ body {
     float: right;
     margin-top: 0.5rem; }
   .nav-bar .nav-link {
-    color: #444;
+    color: #EEE;
     text-decoration: none;
-    margin-right: 1rem; }
+    margin-right: 2rem; }
+
+#mutt-display .slide-row {
+  height: 52vh;
+  padding-top: 1rem; }
+  #mutt-display .slide-row .guess-display-hidden {
+    cursor: pointer; }
+  #mutt-display .slide-row .guess-display-section {
+    margin-top: 1rem; }
+  #mutt-display .slide-row .guess-display {
+    border-radius: 3px;
+    background-color: #F7882F;
+    padding: 0.5rem;
+    color: #EEE;
+    font-size: 1rem; }
+    #mutt-display .slide-row .guess-display ul {
+      margin-left: 0;
+      margin-bottom: 0; }
+    #mutt-display .slide-row .guess-display .top-guesses {
+      margin-bottom: 0; }
+  #mutt-display .slide-row .guess-item {
+    list-style: none; }
+    #mutt-display .slide-row .guess-item .guess-frequency {
+      float: right; }
+
+#mutt-display .guess-row {
+  height: 40vh;
+  padding: 2rem; }
+
+.slideshow-wrapper {
+  padding-top: 1rem; }
 
 .slideshow {
-  width: 75%;
-  height: 55vh; }
+  height: 50vh;
+  margin-bottom: 3rem; }
+  @media (min-width: 400px) {
+    .slideshow {
+      padding: 0 3rem; } }
   .slideshow .slick-slider {
     height: 100%; }
     .slideshow .slick-slider .slick-track {
       height: 100%; }
   .slideshow .slick-list {
     height: 100%;
-    padding: 0.5rem; }
+    background-color: #EEE; }
+    @media (min-width: 600px) {
+      .slideshow .slick-list {
+        background-color: #FFF; } }
     .slideshow .slick-list img {
+      padding: 0 0.25rem;
       height: 100%;
       margin: 0 auto; }
+    .slideshow .slick-list .slick-active > img {
+      height: auto; }
+      @media (min-width: 600px) {
+        .slideshow .slick-list .slick-active > img {
+          height: 100%; } }
   .slideshow .slick-next, .slideshow .slick-prev {
-    background: #AAA; }
+    height: 100%;
+    width: 2rem;
+    visibility: hidden; }
+    @media (min-width: 600px) {
+      .slideshow .slick-next, .slideshow .slick-prev {
+        visibility: visible; } }
+    .slideshow .slick-next:hover img, .slideshow .slick-prev:hover img {
+      background-color: #EEF; }
+    .slideshow .slick-next img, .slideshow .slick-prev img {
+      height: 4rem;
+      position: absolute;
+      top: 50%;
+      margin-top: -2rem;
+      border-radius: 5px; }
+    .slideshow .slick-next:before, .slideshow .slick-prev:before {
+      visibility: hidden; }
+  .slideshow .slick-next img {
+    margin-left: -0.5rem; }
+  .slideshow .slick-prev img {
+    margin-left: -1.125rem; }
   .slideshow .mutt-name {
     text-align: center; }
 
-.guess .guess-item {
-  list-style: none; }
+.row.guess-row .guess-select {
+  height: 100%;
+  padding: 1rem; }
 
 .mutton {
   border-radius: 3px; }

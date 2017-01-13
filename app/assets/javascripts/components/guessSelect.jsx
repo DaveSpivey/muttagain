@@ -7,9 +7,9 @@ export default class GuessSelect extends React.Component {
     const { breeds, muttId, handleGuess } = this.props;
     return (
       <div>
-        <h4>{ 'Guess a breed for this mutt' }</h4>
+        <h5>{ 'Guess a breed for this mutt' }</h5>
         <form>
-          <select id="guess-select" onChange={ handleGuess } >
+          <select id="guess-select-input" onChange={ handleGuess } >
             { breeds.map(function(breed) {
               return <option key={ breed.id }
                              value={ breed.id } >

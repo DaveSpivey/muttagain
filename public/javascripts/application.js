@@ -45,7 +45,7 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	__webpack_require__(1);
-	module.exports = __webpack_require__(499);
+	module.exports = __webpack_require__(500);
 
 
 /***/ },
@@ -31748,7 +31748,7 @@
 	// Manually add components to window and global
 	// so that react_ujs and react-server can find them and render them.
 	window.MuttDisplay = global.MuttDisplay = __webpack_require__(478).default;
-	window.ProfilePage = global.ProfilePage = __webpack_require__(498).default;
+	window.ProfilePage = global.ProfilePage = __webpack_require__(499).default;
 	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
 
 /***/ },
@@ -39725,17 +39725,17 @@
 
 	var _reactDom2 = _interopRequireDefault(_reactDom);
 
-	var _reactSlick = __webpack_require__(479);
+	var _Slideshow = __webpack_require__(479);
 
-	var _reactSlick2 = _interopRequireDefault(_reactSlick);
+	var _Slideshow2 = _interopRequireDefault(_Slideshow);
 
-	var _guessSelect = __webpack_require__(496);
+	var _GuessSelect = __webpack_require__(497);
 
-	var _guessSelect2 = _interopRequireDefault(_guessSelect);
+	var _GuessSelect2 = _interopRequireDefault(_GuessSelect);
 
-	var _guessDisplay = __webpack_require__(497);
+	var _GuessDisplay = __webpack_require__(498);
 
-	var _guessDisplay2 = _interopRequireDefault(_guessDisplay);
+	var _GuessDisplay2 = _interopRequireDefault(_GuessDisplay);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -39744,6 +39744,8 @@
 	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	// import Slider from 'react-slick';
+
 
 	var MuttDisplay = function (_React$Component) {
 	  _inherits(MuttDisplay, _React$Component);
@@ -39760,10 +39762,6 @@
 
 	    _this.handleFlip = _this.handleFlip.bind(_this);
 	    _this.handleGuess = _this.handleGuess.bind(_this);
-	    _this.slideshowSettings = {
-	      dots: false,
-	      afterChange: _this.handleFlip
-	    };
 	    return _this;
 	  }
 
@@ -39790,7 +39788,7 @@
 	  }, {
 	    key: 'handleGuess',
 	    value: function handleGuess() {
-	      var selector = document.getElementById("guess-select");
+	      var selector = document.getElementById("guess-select-input");
 	      var breedId = selector.options[selector.selectedIndex].value;
 	      var _state = this.state,
 	          slides = _state.slides,
@@ -39802,7 +39800,7 @@
 
 	      $.ajax({
 	        type: "POST",
-	        url: "/mutts/" + currentMutt.muttId + "/guesses",
+	        url: '/mutts/' + currentMutt.muttId + '/guesses',
 	        data: { breedId: breedId },
 	        success: function success(data) {
 	          var guessedBreed = breeds.find(function (breed) {
@@ -39824,49 +39822,33 @@
 
 	      var currentMutt = slides[currentSlide];
 
-	      var slideshow = slides.map(function (slide, idx) {
-	        return _react2.default.createElement(
-	          'div',
-	          { key: idx },
-	          _react2.default.createElement('img', { src: slide.photoUrl })
-	        );
-	      });
-	      // console.log("currentMutt", currentMutt);
-
 	      return _react2.default.createElement(
 	        'div',
-	        null,
+	        { className: 'mutt-display-content' },
 	        _react2.default.createElement(
 	          'div',
-	          { className: 'row' },
+	          { className: 'row slide-row' },
 	          _react2.default.createElement(
 	            'div',
-	            { className: 'slideshow small-8 small-offset-2 columns' },
-	            _react2.default.createElement(
-	              _reactSlick2.default,
-	              this.slideshowSettings,
-	              slideshow
-	            ),
-	            _react2.default.createElement(
-	              'h3',
-	              { className: 'mutt-name' },
-	              currentMutt.muttName
-	            )
+	            { className: 'slideshow-wrapper large-9 medium-12 columns' },
+	            _react2.default.createElement(_Slideshow2.default, { slides: slides,
+	              currentSlide: currentSlide,
+	              handleFlip: this.handleFlip })
+	          ),
+	          _react2.default.createElement(
+	            'div',
+	            { className: 'guess-display-section large-3 medium-12 columns' },
+	            _react2.default.createElement(_GuessDisplay2.default, { muttId: currentMutt.muttId,
+	              guesses: currentMutt.muttGuesses })
 	          )
 	        ),
 	        _react2.default.createElement(
 	          'div',
-	          { className: 'row guess' },
+	          { className: 'row guess-row' },
 	          _react2.default.createElement(
 	            'div',
-	            { className: 'small-7 columns' },
-	            _react2.default.createElement(_guessDisplay2.default, { muttId: currentMutt.muttId,
-	              guesses: currentMutt.muttGuesses })
-	          ),
-	          _react2.default.createElement(
-	            'div',
-	            { className: 'small-3 small-offset-2 columns' },
-	            _react2.default.createElement(_guessSelect2.default, { breeds: breeds,
+	            { className: 'guess-select medium-9 small-12 columns' },
+	            _react2.default.createElement(_GuessSelect2.default, { breeds: breeds,
 	              muttId: currentMutt.muttId,
 	              handleGuess: this.handleGuess })
 	          )
@@ -39887,10 +39869,148 @@
 
 	'use strict';
 
-	module.exports = __webpack_require__(480);
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _react = __webpack_require__(3);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _reactDom = __webpack_require__(34);
+
+	var _reactDom2 = _interopRequireDefault(_reactDom);
+
+	var _reactSlick = __webpack_require__(480);
+
+	var _reactSlick2 = _interopRequireDefault(_reactSlick);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var Slideshow = function (_React$Component) {
+	  _inherits(Slideshow, _React$Component);
+
+	  function Slideshow(props) {
+	    _classCallCheck(this, Slideshow);
+
+	    var _this = _possibleConstructorReturn(this, (Slideshow.__proto__ || Object.getPrototypeOf(Slideshow)).call(this, props));
+
+	    _this.slideshowSettings = {
+	      dots: false,
+	      afterChange: _this.props.handleFlip,
+	      nextArrow: _react2.default.createElement(NextArrow, null),
+	      prevArrow: _react2.default.createElement(PrevArrow, null)
+	    };
+	    return _this;
+	  }
+
+	  _createClass(Slideshow, [{
+	    key: 'render',
+	    value: function render() {
+	      var _props = this.props,
+	          slides = _props.slides,
+	          currentSlide = _props.currentSlide;
+
+	      var currentMutt = slides[currentSlide];
+
+	      var slideshow = slides.map(function (slide, idx) {
+	        return _react2.default.createElement(
+	          'div',
+	          { key: idx },
+	          _react2.default.createElement('img', { src: slide.photoUrl })
+	        );
+	      });
+
+	      return _react2.default.createElement(
+	        'div',
+	        { className: 'slideshow' },
+	        _react2.default.createElement(
+	          'a',
+	          { href: '/mutts/' + currentMutt.muttId },
+	          _react2.default.createElement(
+	            _reactSlick2.default,
+	            this.slideshowSettings,
+	            slideshow
+	          ),
+	          _react2.default.createElement(
+	            'h4',
+	            { className: 'mutt-name' },
+	            currentMutt.muttName
+	          )
+	        )
+	      );
+	    }
+	  }]);
+
+	  return Slideshow;
+	}(_react2.default.Component);
+
+	exports.default = Slideshow;
+
+	var NextArrow = function (_React$Component2) {
+	  _inherits(NextArrow, _React$Component2);
+
+	  function NextArrow() {
+	    _classCallCheck(this, NextArrow);
+
+	    return _possibleConstructorReturn(this, (NextArrow.__proto__ || Object.getPrototypeOf(NextArrow)).apply(this, arguments));
+	  }
+
+	  _createClass(NextArrow, [{
+	    key: 'render',
+	    value: function render() {
+	      return _react2.default.createElement(
+	        'div',
+	        this.props,
+	        _react2.default.createElement('img', { src: '../images/nextArrow.png' })
+	      );
+	    }
+	  }]);
+
+	  return NextArrow;
+	}(_react2.default.Component);
+
+	var PrevArrow = function (_React$Component3) {
+	  _inherits(PrevArrow, _React$Component3);
+
+	  function PrevArrow() {
+	    _classCallCheck(this, PrevArrow);
+
+	    return _possibleConstructorReturn(this, (PrevArrow.__proto__ || Object.getPrototypeOf(PrevArrow)).apply(this, arguments));
+	  }
+
+	  _createClass(PrevArrow, [{
+	    key: 'render',
+	    value: function render() {
+	      return _react2.default.createElement(
+	        'div',
+	        this.props,
+	        _react2.default.createElement('img', { src: '../images/prevArrow.png' })
+	      );
+	    }
+	  }]);
+
+	  return PrevArrow;
+	}(_react2.default.Component);
 
 /***/ },
 /* 480 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	module.exports = __webpack_require__(481);
+
+/***/ },
+/* 481 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -39901,21 +40021,21 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _innerSlider = __webpack_require__(481);
+	var _innerSlider = __webpack_require__(482);
 
 	var _objectAssign = __webpack_require__(6);
 
 	var _objectAssign2 = _interopRequireDefault(_objectAssign);
 
-	var _json2mq = __webpack_require__(491);
+	var _json2mq = __webpack_require__(492);
 
 	var _json2mq2 = _interopRequireDefault(_json2mq);
 
-	var _reactResponsiveMixin = __webpack_require__(493);
+	var _reactResponsiveMixin = __webpack_require__(494);
 
 	var _reactResponsiveMixin2 = _interopRequireDefault(_reactResponsiveMixin);
 
-	var _defaultProps = __webpack_require__(486);
+	var _defaultProps = __webpack_require__(487);
 
 	var _defaultProps2 = _interopRequireDefault(_defaultProps);
 
@@ -40022,7 +40142,7 @@
 	module.exports = Slider;
 
 /***/ },
-/* 481 */
+/* 482 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {'use strict';
@@ -40036,23 +40156,23 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _eventHandlers = __webpack_require__(482);
+	var _eventHandlers = __webpack_require__(483);
 
 	var _eventHandlers2 = _interopRequireDefault(_eventHandlers);
 
-	var _helpers = __webpack_require__(484);
+	var _helpers = __webpack_require__(485);
 
 	var _helpers2 = _interopRequireDefault(_helpers);
 
-	var _initialState = __webpack_require__(485);
+	var _initialState = __webpack_require__(486);
 
 	var _initialState2 = _interopRequireDefault(_initialState);
 
-	var _defaultProps = __webpack_require__(486);
+	var _defaultProps = __webpack_require__(487);
 
 	var _defaultProps2 = _interopRequireDefault(_defaultProps);
 
-	var _classnames = __webpack_require__(487);
+	var _classnames = __webpack_require__(488);
 
 	var _classnames2 = _interopRequireDefault(_classnames);
 
@@ -40060,11 +40180,11 @@
 
 	var _objectAssign2 = _interopRequireDefault(_objectAssign);
 
-	var _track = __webpack_require__(488);
+	var _track = __webpack_require__(489);
 
-	var _dots = __webpack_require__(489);
+	var _dots = __webpack_require__(490);
 
-	var _arrows = __webpack_require__(490);
+	var _arrows = __webpack_require__(491);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -40300,16 +40420,16 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(5)))
 
 /***/ },
-/* 482 */
+/* 483 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
 	exports.__esModule = true;
 
-	var _trackHelper = __webpack_require__(483);
+	var _trackHelper = __webpack_require__(484);
 
-	var _helpers = __webpack_require__(484);
+	var _helpers = __webpack_require__(485);
 
 	var _helpers2 = _interopRequireDefault(_helpers);
 
@@ -40640,7 +40760,7 @@
 	exports.default = EventHandlers;
 
 /***/ },
-/* 483 */
+/* 484 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -40800,7 +40920,7 @@
 	};
 
 /***/ },
-/* 484 */
+/* 485 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -40817,7 +40937,7 @@
 
 	var _reactDom2 = _interopRequireDefault(_reactDom);
 
-	var _trackHelper = __webpack_require__(483);
+	var _trackHelper = __webpack_require__(484);
 
 	var _objectAssign = __webpack_require__(6);
 
@@ -41170,7 +41290,7 @@
 	exports.default = helpers;
 
 /***/ },
-/* 485 */
+/* 486 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -41221,7 +41341,7 @@
 	module.exports = initialState;
 
 /***/ },
-/* 486 */
+/* 487 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -41287,7 +41407,7 @@
 	module.exports = defaultProps;
 
 /***/ },
-/* 487 */
+/* 488 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
@@ -41341,7 +41461,7 @@
 
 
 /***/ },
-/* 488 */
+/* 489 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -41357,7 +41477,7 @@
 
 	var _objectAssign2 = _interopRequireDefault(_objectAssign);
 
-	var _classnames = __webpack_require__(487);
+	var _classnames = __webpack_require__(488);
 
 	var _classnames2 = _interopRequireDefault(_classnames);
 
@@ -41510,7 +41630,7 @@
 	});
 
 /***/ },
-/* 489 */
+/* 490 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -41522,7 +41642,7 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _classnames = __webpack_require__(487);
+	var _classnames = __webpack_require__(488);
 
 	var _classnames2 = _interopRequireDefault(_classnames);
 
@@ -41588,7 +41708,7 @@
 	});
 
 /***/ },
-/* 490 */
+/* 491 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -41602,11 +41722,11 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _classnames = __webpack_require__(487);
+	var _classnames = __webpack_require__(488);
 
 	var _classnames2 = _interopRequireDefault(_classnames);
 
-	var _helpers = __webpack_require__(484);
+	var _helpers = __webpack_require__(485);
 
 	var _helpers2 = _interopRequireDefault(_helpers);
 
@@ -41697,10 +41817,10 @@
 	});
 
 /***/ },
-/* 491 */
+/* 492 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var camel2hyphen = __webpack_require__(492);
+	var camel2hyphen = __webpack_require__(493);
 
 	var isDimension = function (feature) {
 	  var re = /[height|width]$/;
@@ -41753,7 +41873,7 @@
 	module.exports = json2mq;
 
 /***/ },
-/* 492 */
+/* 493 */
 /***/ function(module, exports) {
 
 	var camel2hyphen = function (str) {
@@ -41767,12 +41887,12 @@
 	module.exports = camel2hyphen;
 
 /***/ },
-/* 493 */
+/* 494 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var canUseDOM = __webpack_require__(494);
-	var enquire = canUseDOM && __webpack_require__(495);
-	var json2mq = __webpack_require__(491);
+	var canUseDOM = __webpack_require__(495);
+	var enquire = canUseDOM && __webpack_require__(496);
+	var json2mq = __webpack_require__(492);
 
 	var ResponsiveMixin = {
 	  media: function (query, handler) {
@@ -41803,7 +41923,7 @@
 
 
 /***/ },
-/* 494 */
+/* 495 */
 /***/ function(module, exports) {
 
 	var canUseDOM = !!(
@@ -41815,7 +41935,7 @@
 	module.exports = canUseDOM;
 
 /***/ },
-/* 495 */
+/* 496 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_RESULT__;/*!
@@ -42113,7 +42233,7 @@
 	}));
 
 /***/ },
-/* 496 */
+/* 497 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -42161,7 +42281,7 @@
 	        'div',
 	        null,
 	        _react2.default.createElement(
-	          'h4',
+	          'h5',
 	          null,
 	          'Guess a breed for this mutt'
 	        ),
@@ -42170,7 +42290,7 @@
 	          null,
 	          _react2.default.createElement(
 	            'select',
-	            { id: 'guess-select', onChange: handleGuess },
+	            { id: 'guess-select-input', onChange: handleGuess },
 	            breeds.map(function (breed) {
 	              return _react2.default.createElement(
 	                'option',
@@ -42197,7 +42317,7 @@
 	};
 
 /***/ },
-/* 497 */
+/* 498 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -42230,10 +42350,23 @@
 	  function GuessDisplay() {
 	    _classCallCheck(this, GuessDisplay);
 
-	    return _possibleConstructorReturn(this, (GuessDisplay.__proto__ || Object.getPrototypeOf(GuessDisplay)).apply(this, arguments));
+	    var _this = _possibleConstructorReturn(this, (GuessDisplay.__proto__ || Object.getPrototypeOf(GuessDisplay)).call(this));
+
+	    _this.state = { hidden: true };
+
+	    _this.getTopGuesses = _this.getTopGuesses.bind(_this);
+	    _this.showGuesses = _this.showGuesses.bind(_this);
+	    return _this;
 	  }
 
 	  _createClass(GuessDisplay, [{
+	    key: 'componentWillReceiveProps',
+	    value: function componentWillReceiveProps(nextProps) {
+	      if (nextProps.muttId != this.props.muttId) {
+	        this.setState({ hidden: true });
+	      }
+	    }
+	  }, {
 	    key: 'getTopGuesses',
 	    value: function getTopGuesses(guesses) {
 	      var guessList = Object.keys(guesses).map(function (guessName) {
@@ -42255,10 +42388,20 @@
 	          _react2.default.createElement(
 	            'a',
 	            { href: guess.link },
-	            guess.name + ", " + guess.frequency
+	            guess.name
+	          ),
+	          _react2.default.createElement(
+	            'span',
+	            { className: 'guess-frequency' },
+	            guess.frequency
 	          )
 	        );
 	      });
+	    }
+	  }, {
+	    key: 'showGuesses',
+	    value: function showGuesses() {
+	      this.setState({ hidden: false });
 	    }
 	  }, {
 	    key: 'render',
@@ -42267,23 +42410,33 @@
 	          muttId = _props.muttId,
 	          guesses = _props.guesses;
 
-	      var guessList = this.getTopGuesses(guesses);
-	      return _react2.default.createElement(
-	        'div',
-	        null,
-	        'GuessDisplay muttId: ',
-	        muttId,
-	        _react2.default.createElement(
-	          'p',
-	          null,
-	          'Top 3 guesses:'
-	        ),
-	        _react2.default.createElement(
-	          'ul',
-	          null,
-	          guessList
-	        )
-	      );
+	      if (this.state.hidden) {
+	        return _react2.default.createElement(
+	          'div',
+	          { onClick: this.showGuesses, className: 'guess-display guess-display-hidden' },
+	          _react2.default.createElement(
+	            'p',
+	            { className: 'top-guesses' },
+	            'Show top guesses for this mutt'
+	          )
+	        );
+	      } else {
+	        var guessList = this.getTopGuesses(guesses);
+	        return _react2.default.createElement(
+	          'div',
+	          { className: 'guess-display' },
+	          _react2.default.createElement(
+	            'p',
+	            { className: 'top-guesses' },
+	            'Top guesses for this mutt:'
+	          ),
+	          _react2.default.createElement(
+	            'ul',
+	            null,
+	            guessList
+	          )
+	        );
+	      }
 	    }
 	  }]);
 
@@ -42294,7 +42447,7 @@
 	;
 
 /***/ },
-/* 498 */
+/* 499 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -42431,7 +42584,7 @@
 	exports.default = ProfilePage;
 
 /***/ },
-/* 499 */
+/* 500 */
 /***/ function(module, exports) {
 
 	// removed by extract-text-webpack-plugin

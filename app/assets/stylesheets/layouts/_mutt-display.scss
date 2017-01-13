@@ -1,0 +1,36 @@
+#mutt-display {
+  .slide-row {
+    height: 52vh;
+    padding-top: 1rem;
+    .guess-display-hidden {
+      cursor: pointer;
+    }
+    .guess-display-section {
+      margin-top: 1rem;
+    }
+    .guess-display {
+      border-radius: 3px;
+      background-color: $apricot;
+      padding: 0.5rem;
+      color: #EEE;
+      font-size: 1rem;
+      ul {
+        margin-left: 0;
+        margin-bottom: 0;
+      }
+      .top-guesses {
+        margin-bottom: 0;
+      }
+    }
+    .guess-item {
+      list-style: none;
+      .guess-frequency {
+        float: right;
+      }
+    }
+  }
+  .guess-row {
+    height: 40vh;
+    padding: 2rem;
+  }
+}
