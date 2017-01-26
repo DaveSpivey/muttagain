@@ -1,7 +1,12 @@
 .row.guess-row {
   .guess-select {
     height: 100%;
-    // background-color: #DCC7AA;
     padding: 1rem;
+  }
+  .guess-submit {
+    margin-top: 1rem;
+  }
+  .submit-hidden {
+    display: none;
   }
 }

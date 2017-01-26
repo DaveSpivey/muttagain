@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 
-export default class GuessDisplay extends React.Component {
+export default class TopGuessDisplay extends React.Component {
 
   constructor() {
     super();
@@ -31,10 +31,12 @@ export default class GuessDisplay extends React.Component {
     }).slice(0, 3);
 
     return topGuesses.map((guess) => {
-      return <li key={ guess.name } className="guess-item" >
-               <a href={ guess.link }>{ guess.name }</a>
-               <span className="guess-frequency">{ guess.frequency }</span>
-             </li>
+      return (
+        <li key={ guess.name } className="top-guess-item" >
+          <a href={ guess.link }>{ guess.name }</a>
+          <span className="guess-frequency">{ guess.frequency }</span>
+        </li>
+       );
     });
   }
 
@@ -45,13 +47,15 @@ export default class GuessDisplay extends React.Component {
   render() {
     const { muttId, guesses } = this.props;
     if (this.state.hidden) {
-      return (<div onClick={ this.showGuesses } className="guess-display guess-display-hidden">
+      return (
+        <div onClick={ this.showGuesses } className="top-guess-display top-guess-display-hidden">
           <p className="top-guesses">Show top guesses for this mutt</p>
         </div>
       );
     } else {
       const guessList = this.getTopGuesses(guesses);
-      return (<div className="guess-display">
+      return (
+        <div className="top-guess-display">
           <p className="top-guesses">Top guesses for this mutt:</p>
           <ul>
             { guessList }

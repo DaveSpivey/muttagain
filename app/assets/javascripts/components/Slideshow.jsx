@@ -15,6 +15,12 @@ export default class Slideshow extends React.Component {
     };
   }
 
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.currentSlide != this.props.currentSlide) {
+      this.slider.slickGoTo(nextProps.currentSlide);
+    }
+  }
+
   render() {
     const { slides, currentSlide } = this.props;
     const currentMutt = slides[currentSlide];
@@ -26,7 +32,8 @@ export default class Slideshow extends React.Component {
     return (
       <div className="slideshow">
         <a href={ `/mutts/${ currentMutt.muttId }` }>
-          <Slider { ...this.slideshowSettings }>
+          <Slider { ...this.slideshowSettings }
+                  ref={ (slider) => { this.slider = slider }} >
             { slideshow }
           </Slider>
           <h4 className="mutt-name">{ currentMutt.muttName }</h4>
@@ -36,22 +43,18 @@ export default class Slideshow extends React.Component {
   }
 }
 
-class NextArrow extends React.Component {
-  render() {
-    return (
-      <div {...this.props}>
-        <img src="../images/nextArrow.png" />
-      </div>
-    );
-  }
+const NextArrow = (props) => {
+  return (
+    <div { ...props }>
+      <img src="../images/nextArrow.png" />
+    </div>
+  );
 }
 
-class PrevArrow extends React.Component {
-  render() {
-    return (
-      <div {...this.props}>
-        <img src="../images/prevArrow.png" />
-      </div>
-    );
-  }
+const PrevArrow = (props) => {
+  return (
+    <div { ...props }>
+      <img src="../images/prevArrow.png" />
+    </div>
+  );
 }

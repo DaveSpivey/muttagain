@@ -5,6 +5,7 @@ class MuttsController < ApplicationController
 
   def index
     @breeds = Breed.all
+    @mutts = Mutt.all
     @photos = Photo.where(profile: true)
     if @photos.empty?
       flash[:error] = "No mutt photos!"
