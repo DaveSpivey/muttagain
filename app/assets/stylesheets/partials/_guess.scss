@@ -1,5 +1,12 @@
-.guess {
-  .guess-item {
-    list-style: none;
+.row.guess-row {
+  .guess-select {
+    height: 100%;
+    padding: 1rem;
+  }
+  .guess-submit {
+    margin-top: 1rem;
+  }
+  .submit-hidden {
+    display: none;
   }
 }

@@ -31,8 +31,13 @@ module.exports = {
         }
       },
       {
-        test: /\.scss$/,
+        test: /\.(css|scss)$/,
         loader: ExtractTextPlugin.extract("css!sass")
+      },
+      {
+        test: /\.(png|jpg)$/,
+        // include: path.join(__dirname, 'img'),
+        loader: "file-loader?name=[path][name].[ext]&publicPath=../"
       }
     ]
   },
