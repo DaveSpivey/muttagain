@@ -1,9 +1,9 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-// import Slider from 'react-slick';
+import Select from 'react-select-plus';
 import Slideshow from './Slideshow.jsx';
 import GuessSelect from './GuessSelect.jsx';
-import GuessDisplay from './GuessDisplay.jsx';
+import TopGuessDisplay from './TopGuessDisplay.jsx';
 
 export default class MuttDisplay extends React.Component {
 
@@ -11,57 +11,89 @@ export default class MuttDisplay extends React.Component {
     super(props);
     this.state = {
       slides: [{ photoUrl: '', muttName: '', muttGuesses: {} }],
-      currentSlide: 0
+      currentSlide: 0,
+      currentGuess: null
     };
 
     this.handleFlip = this.handleFlip.bind(this);
     this.handleGuess = this.handleGuess.bind(this);
+    this.getCurrentGuess = this.getCurrentGuess.bind(this);
+    this.findMutt = this.findMutt.bind(this);
   }
 
   componentDidMount() {
-    $.ajax({
-      url: "/mutts",
-      dataType: 'json',
-      cache: false,
-      success: function(data) {
-        this.setState({ slides: data.slides });
-      }.bind(this),
-      error: function(xhr, status, err) {
-        console.error(status, err.toString());
-      }.bind(this)
-    });
+    fetch('mutts', {
+      method: 'GET',
+      headers: {
+        'Accept': 'application/json'
+      }
+    })
+    .then((response) => response.json())
+    .then((data) => {
+      this.setState({ slides: data.slides })
+    })
+    .catch((error) => {
+      console.error(error)
+    })
   }
 
   handleFlip(index) {
-    this.setState({ currentSlide: index })
+    this.setState({ currentSlide: index, currentGuess: null })
+  }
+
+  getCurrentGuess(selection) {
+    this.setState({ currentGuess: selection })
+  }
+
+  findMutt(value) {
+    const slideIndex = this.state.slides.findIndex((slide) => {
+      return slide.muttName == value.label
+    });
+    this.setState({ currentSlide: slideIndex });
   }
 
   handleGuess() {
-    const selector = document.getElementById("guess-select-input");
-    const breedId = selector.options[selector.selectedIndex].value;
-    const { slides, currentSlide } = this.state;
-    const currentMutt = slides[currentSlide];
+    const { slides, currentSlide, currentGuess } = this.state;
     const { breeds } = this.props;
+    const currentMutt = slides[currentSlide];
 
-    $.ajax({
-      type: "POST",
-      url: `/mutts/${ currentMutt.muttId }/guesses`,
-      data: { breedId: breedId },
-      success: function(data) {
-        const guessedBreed = breeds.find((breed) => {
-          return breed.id == data.breed_id
-        })
+    fetch(`/mutts/${ currentMutt.muttId }/guesses`, {
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
       },
-      error: function(xhr, status, err) {
-        console.error(status, err.toString());
-      }
-    });
+      method: 'POST',
+      body: JSON.stringify({ breedId: currentGuess.value })
+    })
+    .then((response) => response.json())
+    .then((data) => {
+      const guessedBreed = breeds.find((breed) => {
+        return breed.id == data.breed_id
+      });
+      this.setState({ currentGuess: null });
+      this.displayGuessSuccess(guessedBreed);
+    })
+    .catch((error) => {
+      console.error(error)
+    })
+  }
+
+  displayGuessSuccess(guessedBreed) {
+    // TODO - actually display this
+    console.log("YOU GUESSED ", guessedBreed);
   }
 
   render() {
     const { slides, currentSlide } = this.state;
-    const { breeds } = this.props;
+    const { breeds, mutts } = this.props;
     const currentMutt = slides[currentSlide];
+    let options = [];
+    mutts.map((mutt) => {
+      options.push({ value: mutt.id, label: mutt.name })
+    });
+    let muttSearchConfig = {
+      placeholder: "Find a mutt by name..."
+    };
 
     return (
       <div className="mutt-display-content">
@@ -71,16 +103,23 @@ export default class MuttDisplay extends React.Component {
                        currentSlide={ currentSlide }
                        handleFlip={ this.handleFlip } />
           </div>
-          <div className="guess-display-section large-3 medium-12 columns">
-            <GuessDisplay muttId={ currentMutt.muttId }
-                          guesses={ currentMutt.muttGuesses } />
+          <div className="current-mutt-section large-3 medium-12 columns">
+            <Select className="mutt-search-input"
+                    options={ options }
+                    { ...muttSearchConfig }
+                    value={ '' }
+                    onChange={ this.findMutt } />
+            <TopGuessDisplay muttId={ currentMutt.muttId }
+                             guesses={ currentMutt.muttGuesses } />
           </div>
         </div>
         <div className="row guess-row">
           <div className="guess-select medium-9 small-12 columns">
             <GuessSelect breeds={ breeds }
                          muttId={ currentMutt.muttId }
-                         handleGuess={ this.handleGuess } />
+                         handleGuess={ this.handleGuess }
+                         currentGuess={ this.state.currentGuess }
+                         getCurrentGuess={ this.getCurrentGuess } />
           </div>
         </div>
       </div>
