@@ -381,6 +381,12 @@ body {
 h1, h2, h3, h4, h5, h6 {
   font-family: Futura, sans-serif; }
 
+.error-message {
+  font-size: 18px;
+  color: #C62828;
+  margin: 0.25rem 1rem;
+  float: right; }
+
 .nav-bar {
   height: 8vh;
   background-image: url(../images/black-fur.jpg);
@@ -428,6 +434,14 @@ h1, h2, h3, h4, h5, h6 {
 
 #mutt-display .mutt-search-input {
   margin-bottom: 1rem; }
+
+.edit-confirm form {
+  display: inline-block; }
+  .edit-confirm form .button {
+    margin-left: 0; }
+
+.edit-confirm .button {
+  margin-left: 0.5rem; }
 
 .slideshow-wrapper {
   padding-top: 1rem; }
@@ -492,6 +506,7 @@ h1, h2, h3, h4, h5, h6 {
   display: none; }
 
 .mutton {
+  display: inline-block;
   border-radius: 3px; }
 
 .button-multi .mutton {

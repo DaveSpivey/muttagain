@@ -40,6 +40,9 @@ class MuttsController < ApplicationController
   def show
   end
 
+  def edit
+  end
+
   def create
     @mutt = Mutt.new(mutt_params)
     @mutt.owner_id = current_user.id
@@ -49,6 +52,18 @@ class MuttsController < ApplicationController
       flash[:error] = "Mutt could not be saved"
       redirect_to new_mutt_path
     end
+  end
+
+  def update
+    @mutt.name = params[:muttName]
+    if @mutt.save
+      render json: { muttName: params[:muttName] }
+    else
+      render :json => { :errors => @mutt.errors }
+    end
+  end
+
+  def destroy
   end
 
   private

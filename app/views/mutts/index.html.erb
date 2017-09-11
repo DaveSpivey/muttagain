@@ -1,7 +1,6 @@
 <div id="mutt-display">
   <% if flash[:error] %>
-    <h2><%= flash[:error] %></h2>
-  <% else %>
-    <%= react_component('MuttDisplay', props: { mutts: @mutts, breeds: @breeds }) %>
+    <h3 class="error-message"><%= flash[:error] %></h3>
   <% end %>
+  <%= react_component('MuttDisplay', props: { mutts: @mutts, breeds: @breeds }) %>
 </div>

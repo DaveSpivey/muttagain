@@ -1,3 +1,7 @@
+<% if flash[:error] %>
+  <h3 class="error-message"><%= flash[:error] %></h3>
+<% end %>
+
 <h1><%= @mutt.name %></h1>
 
 <% photo = @mutt.photos.find_by(profile: true) || @mutt.photos.first %>

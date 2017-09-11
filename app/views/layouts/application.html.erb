@@ -19,7 +19,12 @@
 
   <%= javascript_include_tag "../foundation/javascript/vendor/jquery.js" %>
   <%= javascript_include_tag "../foundation/javascript/vendor/what-input.js" %>
-  <%= javascript_include_tag "../foundation/javascript/vendor/foundation.js" %>
+  <%= javascript_include_tag "../foundation/javascript/vendor/foundation.min.js" %>
   <%= javascript_include_tag "../foundation/javascript/app.js" %>
+  <script>
+    $(document).ready(function() {
+      $(document).foundation();
+    });
+  </script>
 </body>
 </html>
