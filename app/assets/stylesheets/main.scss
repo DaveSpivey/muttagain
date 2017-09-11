@@ -1,12 +1,16 @@
+@import
+
 // modules
-@import "modules/variables";
+"modules/variables",
 
 // layouts
-@import "layouts/base";
-@import "layouts/navbar";
-@import "layouts/mutt-display";
+"layouts/base",
+"layouts/navbar",
+"layouts/mutt-display",
+"layouts/modals",
 
 // partials
-@import "partials/slideshow";
-@import "partials/guess";
-@import "partials/buttons";
+"partials/slideshow",
+"partials/guess",
+"partials/buttons"
+;

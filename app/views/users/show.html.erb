@@ -10,7 +10,7 @@
         <% profile_photos.push({'photo' => pic, 'muttId' => mutt.id}) %>
       <% end %>
     <% end %>
-    <%= react_component('ProfilePage', props: { user: @user, profile: @profile, mutts: @user.mutts, profilePhotos: profile_photos }) %>
+    <%= react_component('UserPage', props: { user: @user, profile: @profile, mutts: @user.mutts, profilePhotos: profile_photos }) %>
   <% end %>
 </div>
 

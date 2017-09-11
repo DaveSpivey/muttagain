@@ -1,5 +1,4 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
 import Select from 'react-select-plus';
 import Slideshow from './Slideshow.jsx';
 import GuessSelect from './GuessSelect.jsx';
@@ -10,7 +9,7 @@ export default class MuttDisplay extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      slides: [{ photoUrl: '', muttName: '', muttGuesses: {} }],
+      slides: [{ photoUrl: '', muttId: null, muttName: '', muttGuesses: {} }],
       currentSlide: 0,
       currentGuess: null
     };
@@ -88,8 +87,10 @@ export default class MuttDisplay extends React.Component {
     const { breeds, mutts } = this.props;
     const currentMutt = slides[currentSlide];
     let options = [];
-    mutts.map((mutt) => {
-      options.push({ value: mutt.id, label: mutt.name })
+    slides.map((slide) => {
+      if (slide.photoUrl) {
+        options.push({ value: slide.muttId, label: slide.muttName })
+      }
     });
     let muttSearchConfig = {
       placeholder: "Find a mutt by name..."
