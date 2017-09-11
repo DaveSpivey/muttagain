@@ -6,8 +6,13 @@
       <%= link_to "Profile", user_path(current_user), class: "nav-link" %>
       <%= link_to "Log Out", logout_path, class: "nav-link" %>
     <% else %>
-      <%= link_to "Log In", login_path, class: "nav-link" %>
-      <%= link_to "Sign Up", new_user_path, class: "nav-link" %>
+      <%= link_to "Log In", "#", class: "nav-link", data: {open: "login-modal"} %>
+      <%= link_to "Sign Up", "#", class: "nav-link", data: {open: "signup-modal"} %>
     <% end %>
   </div>
+
+  <%= render "users/new" %>
+  <%= render "sessions/new" %>
 </nav>
+
+<!-- react_component('NavBar', props: { loggedIn: logged_in?, currentUser: current_user }) %> -->

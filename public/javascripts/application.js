@@ -45,7 +45,7 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	__webpack_require__(1);
-	module.exports = __webpack_require__(514);
+	module.exports = __webpack_require__(515);
 
 
 /***/ },
@@ -31748,7 +31748,7 @@
 	// Manually add components to window and global
 	// so that react_ujs and react-server can find them and render them.
 	window.MuttDisplay = global.MuttDisplay = __webpack_require__(478).default;
-	window.ProfilePage = global.ProfilePage = __webpack_require__(513).default;
+	window.UserPage = global.ProfilePage = __webpack_require__(513).default;
 	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
 
 /***/ },
@@ -39723,10 +39723,6 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _reactDom = __webpack_require__(34);
-
-	var _reactDom2 = _interopRequireDefault(_reactDom);
-
 	var _reactSelectPlus = __webpack_require__(479);
 
 	var _reactSelectPlus2 = _interopRequireDefault(_reactSelectPlus);
@@ -39760,7 +39756,7 @@
 	    var _this = _possibleConstructorReturn(this, (MuttDisplay.__proto__ || Object.getPrototypeOf(MuttDisplay)).call(this, props));
 
 	    _this.state = {
-	      slides: [{ photoUrl: '', muttName: '', muttGuesses: {} }],
+	      slides: [{ photoUrl: '', muttId: null, muttName: '', muttGuesses: {} }],
 	      currentSlide: 0,
 	      currentGuess: null
 	    };
@@ -39858,8 +39854,10 @@
 
 	      var currentMutt = slides[currentSlide];
 	      var options = [];
-	      mutts.map(function (mutt) {
-	        options.push({ value: mutt.id, label: mutt.name });
+	      slides.map(function (slide) {
+	        if (slide.photoUrl) {
+	          options.push({ value: slide.muttId, label: slide.muttName });
+	        }
 	      });
 	      var muttSearchConfig = {
 	        placeholder: "Find a mutt by name..."
@@ -42514,10 +42512,6 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _reactDom = __webpack_require__(34);
-
-	var _reactDom2 = _interopRequireDefault(_reactDom);
-
 	var _reactSlick = __webpack_require__(494);
 
 	var _reactSlick2 = _interopRequireDefault(_reactSlick);
@@ -44814,10 +44808,6 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _reactDom = __webpack_require__(34);
-
-	var _reactDom2 = _interopRequireDefault(_reactDom);
-
 	var _reactSelectPlus = __webpack_require__(479);
 
 	var _reactSelectPlus2 = _interopRequireDefault(_reactSelectPlus);
@@ -44920,7 +44910,7 @@
 /* 512 */
 /***/ function(module, exports, __webpack_require__) {
 
-	'use strict';
+	"use strict";
 
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
@@ -44931,10 +44921,6 @@
 	var _react = __webpack_require__(3);
 
 	var _react2 = _interopRequireDefault(_react);
-
-	var _reactDom = __webpack_require__(34);
-
-	var _reactDom2 = _interopRequireDefault(_reactDom);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -44960,14 +44946,14 @@
 	  }
 
 	  _createClass(TopGuessDisplay, [{
-	    key: 'componentWillReceiveProps',
+	    key: "componentWillReceiveProps",
 	    value: function componentWillReceiveProps(nextProps) {
 	      if (nextProps.muttId != this.props.muttId) {
 	        this.setState({ hidden: true });
 	      }
 	    }
 	  }, {
-	    key: 'getTopGuesses',
+	    key: "getTopGuesses",
 	    value: function getTopGuesses(guesses) {
 	      var guessList = Object.keys(guesses).map(function (guessName) {
 	        var currentGuess = guesses[guessName];
@@ -44983,28 +44969,28 @@
 
 	      return topGuesses.map(function (guess) {
 	        return _react2.default.createElement(
-	          'li',
-	          { key: guess.name, className: 'top-guess-item' },
+	          "li",
+	          { key: guess.name, className: "top-guess-item" },
 	          _react2.default.createElement(
-	            'a',
+	            "a",
 	            { href: guess.link },
 	            guess.name
 	          ),
 	          _react2.default.createElement(
-	            'span',
-	            { className: 'guess-frequency' },
+	            "span",
+	            { className: "guess-frequency" },
 	            guess.frequency
 	          )
 	        );
 	      });
 	    }
 	  }, {
-	    key: 'showGuesses',
+	    key: "showGuesses",
 	    value: function showGuesses() {
 	      this.setState({ hidden: false });
 	    }
 	  }, {
-	    key: 'render',
+	    key: "render",
 	    value: function render() {
 	      var _props = this.props,
 	          muttId = _props.muttId,
@@ -45012,26 +44998,26 @@
 
 	      if (this.state.hidden) {
 	        return _react2.default.createElement(
-	          'div',
-	          { onClick: this.showGuesses, className: 'top-guess-display top-guess-display-hidden' },
+	          "div",
+	          { onClick: this.showGuesses, className: "top-guess-display top-guess-display-hidden" },
 	          _react2.default.createElement(
-	            'p',
-	            { className: 'top-guesses' },
-	            'Show top guesses for this mutt'
+	            "p",
+	            { className: "top-guesses" },
+	            "Show top guesses for this mutt"
 	          )
 	        );
 	      } else {
 	        var guessList = this.getTopGuesses(guesses);
 	        return _react2.default.createElement(
-	          'div',
-	          { className: 'top-guess-display' },
+	          "div",
+	          { className: "top-guess-display" },
 	          _react2.default.createElement(
-	            'p',
-	            { className: 'top-guesses' },
-	            'Top guesses for this mutt:'
+	            "p",
+	            { className: "top-guesses" },
+	            "Top guesses for this mutt:"
 	          ),
 	          _react2.default.createElement(
-	            'ul',
+	            "ul",
 	            null,
 	            guessList
 	          )
@@ -45060,11 +45046,9 @@
 
 	var _react = __webpack_require__(3);
 
-	var _react2 = _interopRequireDefault(_react);
+	var _EditModal = __webpack_require__(514);
 
-	var _reactDom = __webpack_require__(34);
-
-	var _reactDom2 = _interopRequireDefault(_reactDom);
+	var _EditModal2 = _interopRequireDefault(_EditModal);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -45074,99 +45058,76 @@
 
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-	var ProfilePage = function (_React$Component) {
-	  _inherits(ProfilePage, _React$Component);
+	var UserPage = function (_Component) {
+	  _inherits(UserPage, _Component);
 
-	  function ProfilePage() {
-	    _classCallCheck(this, ProfilePage);
+	  function UserPage(props) {
+	    _classCallCheck(this, UserPage);
 
-	    return _possibleConstructorReturn(this, (ProfilePage.__proto__ || Object.getPrototypeOf(ProfilePage)).apply(this, arguments));
+	    var _this = _possibleConstructorReturn(this, (UserPage.__proto__ || Object.getPrototypeOf(UserPage)).call(this, props));
+
+	    _this.state = { mutts: [] };
+
+	    _this.editMuttName = _this.editMuttName.bind(_this);
+	    return _this;
 	  }
 
-	  _createClass(ProfilePage, [{
+	  _createClass(UserPage, [{
+	    key: 'componentWillMount',
+	    value: function componentWillMount() {
+	      this.setState({ mutts: this.props.mutts });
+	    }
+	  }, {
+	    key: 'editMuttName',
+	    value: function editMuttName(id, name) {
+	      var newMuttList = this.state.mutts;
+	      var mutt = newMuttList.find(function (mutt) {
+	        return mutt.id === id;
+	      });
+	      mutt.name = name;
+	      this.setState({ mutts: newMuttList });
+	    }
+	  }, {
 	    key: 'handleEdit',
 	    value: function handleEdit(e) {
 	      e.preventDefault();
-	      console.log(e.target);
+	      var muttId = parseInt(e.nativeEvent.target.id);
 	    }
 	  }, {
 	    key: 'handleDelete',
 	    value: function handleDelete(e) {
 	      e.preventDefault();
-	      console.log(e.target);
-	    }
-	  }, {
-	    key: 'getMuttProfiles',
-	    value: function getMuttProfiles() {
-	      var _this2 = this;
-
-	      var _props = this.props,
-	          mutts = _props.mutts,
-	          profilePhotos = _props.profilePhotos;
-
-	      var emptyPicMessage = "No photos yet for this mutt";
-	      var muttProfiles = mutts.map(function (mutt) {
-	        var muttPhoto = void 0;
-	        profilePhotos.forEach(function (photo) {
-	          if (photo.muttId == mutt.id) {
-	            muttPhoto = photo.photo ? _react2.default.createElement(
-	              'a',
-	              { href: '/mutts/' + mutt.id },
-	              _react2.default.createElement('img', { src: photo.photo })
-	            ) : _react2.default.createElement(
-	              'p',
-	              null,
-	              emptyPicMessage
-	            );
-	          }
-	        });
-	        return _react2.default.createElement(
-	          'div',
-	          { className: 'muttProfile', key: 'mutt' + mutt.id },
-	          _react2.default.createElement(
-	            'a',
-	            { href: '/mutts/' + mutt.id },
-	            _react2.default.createElement(
-	              'p',
-	              null,
-	              mutt.name
-	            )
-	          ),
-	          muttPhoto,
-	          _react2.default.createElement(
-	            'div',
-	            { className: 'button-multi' },
-	            _react2.default.createElement(
-	              'a',
-	              { className: 'button tiny mutton edit-button',
-	                href: '/mutts/' + mutt.id + '/edit',
-	                onClick: _this2.handleEdit
-	              },
-	              'Edit'
-	            ),
-	            _react2.default.createElement(
-	              'a',
-	              { className: 'button tiny mutton delete-button',
-	                href: '/mutts/' + mutt.id + '/destroy',
-	                onClick: _this2.handleDelete
-	              },
-	              'Delete'
-	            )
-	          )
-	        );
-	      });
-	      return muttProfiles;
+	      var muttId = parseInt(e.nativeEvent.target.id);
+	      console.log('This would delete mutt with id# ' + muttId);
 	    }
 	  }, {
 	    key: 'render',
 	    value: function render() {
-	      var user = this.props.user;
+	      var _this2 = this;
 
-	      var muttProfiles = this.getMuttProfiles();
-	      return _react2.default.createElement(
+	      var _props = this.props,
+	          user = _props.user,
+	          profilePhotos = _props.profilePhotos;
+	      var mutts = this.state.mutts;
+
+	      var muttProfiles = mutts.map(function (mutt, idx) {
+	        var muttPhoto = void 0;
+	        profilePhotos.forEach(function (photo) {
+	          if (photo.muttId == mutt.id) {
+	            muttPhoto = photo.photo;
+	          }
+	        });
+	        return React.createElement(UserPageMuttDetail, { key: idx,
+	          mutt: mutt,
+	          profilePhoto: muttPhoto,
+	          handleDelete: _this2.handleDelete,
+	          editMuttName: _this2.editMuttName });
+	      });
+
+	      return React.createElement(
 	        'div',
 	        null,
-	        _react2.default.createElement(
+	        React.createElement(
 	          'h2',
 	          null,
 	          'Welcome, ',
@@ -45178,13 +45139,345 @@
 	    }
 	  }]);
 
-	  return ProfilePage;
-	}(_react2.default.Component);
+	  return UserPage;
+	}(_react.Component);
 
-	exports.default = ProfilePage;
+	exports.default = UserPage;
+
+
+	var UserPageMuttDetail = function UserPageMuttDetail(props) {
+	  var mutt = props.mutt,
+	      profilePhoto = props.profilePhoto,
+	      handleDelete = props.handleDelete,
+	      editMuttName = props.editMuttName;
+
+	  var emptyPicMessage = "No photos yet for this mutt";
+	  var muttPhoto = profilePhoto ? React.createElement(
+	    'a',
+	    { href: '/mutts/' + mutt.id },
+	    React.createElement('img', { src: profilePhoto })
+	  ) : React.createElement(
+	    'p',
+	    null,
+	    emptyPicMessage
+	  );
+
+	  return React.createElement(
+	    'div',
+	    { className: 'muttProfile' },
+	    React.createElement(
+	      'a',
+	      { href: '/mutts/' + mutt.id },
+	      React.createElement(
+	        'p',
+	        null,
+	        mutt.name
+	      )
+	    ),
+	    muttPhoto,
+	    React.createElement(
+	      'div',
+	      { className: 'button-multi' },
+	      React.createElement(
+	        'a',
+	        { href: '#', 'data-open': 'edit-modal-' + mutt.id,
+	          id: mutt.id + '-edit-button',
+	          className: 'button tiny mutton edit-button'
+	        },
+	        'Manage Mutt'
+	      )
+	    ),
+	    React.createElement(_EditModal2.default, { muttName: mutt.name,
+	      muttId: mutt.id,
+	      handleDelete: handleDelete,
+	      editMuttName: editMuttName })
+	  );
+	};
 
 /***/ },
 /* 514 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _react = __webpack_require__(3);
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var EditModal = function (_Component) {
+	  _inherits(EditModal, _Component);
+
+	  function EditModal(props) {
+	    _classCallCheck(this, EditModal);
+
+	    var _this = _possibleConstructorReturn(this, (EditModal.__proto__ || Object.getPrototypeOf(EditModal)).call(this, props));
+
+	    _this.state = { value: "" };
+	    _this.changeName = _this.changeName.bind(_this);
+	    _this.closeModal = _this.closeModal.bind(_this);
+	    return _this;
+	  }
+
+	  _createClass(EditModal, [{
+	    key: "changeName",
+	    value: function changeName() {
+	      this.setState({ value: this.newName.value });
+	    }
+	  }, {
+	    key: "closeModal",
+	    value: function closeModal() {
+	      var muttId = this.props.muttId;
+
+	      this.setState({ value: "" });
+	      $("#edit-modal-" + muttId).foundation('close');
+	      $("#edit-confirm-" + muttId).foundation('close');
+	    }
+	  }, {
+	    key: "render",
+	    value: function render() {
+	      var _this2 = this;
+
+	      var _props = this.props,
+	          muttName = _props.muttName,
+	          muttId = _props.muttId,
+	          handleDelete = _props.handleDelete,
+	          editMuttName = _props.editMuttName;
+
+
+	      return React.createElement(
+	        "div",
+	        null,
+	        React.createElement(
+	          "div",
+	          { className: "reveal", id: "edit-modal-" + muttId, "data-reveal": true },
+	          React.createElement(
+	            "p",
+	            { className: "lead" },
+	            "Edit profile for " + muttName
+	          ),
+	          React.createElement(
+	            "div",
+	            { className: "button-multi" },
+	            React.createElement("input", { type: "text",
+	              placeholder: "New name",
+	              onChange: this.changeName,
+	              ref: function ref(input) {
+	                _this2.newName = input;
+	              } }),
+	            React.createElement(
+	              "a",
+	              { href: "#", "data-open": "edit-confirm-" + muttId,
+	                id: muttId + "-edit-confirm",
+	                className: "button tiny mutton edit-button"
+	              },
+	              "Change name"
+	            ),
+	            React.createElement(EditConfirm, { muttName: muttName,
+	              newName: this.state.value,
+	              muttId: muttId,
+	              closeModal: this.closeModal,
+	              editMuttName: editMuttName }),
+	            React.createElement(
+	              "a",
+	              { href: "#", "data-open": "delete-modal-" + muttId,
+	                className: "button tiny mutton delete-button"
+	              },
+	              "Delete Mutt"
+	            )
+	          ),
+	          React.createElement(
+	            "button",
+	            { className: "close-button",
+	              "data-close": "edit-modal-" + muttId,
+	              "aria-label": "Close modal",
+	              type: "button",
+	              onClick: this.closeModal
+	            },
+	            React.createElement(
+	              "span",
+	              { "aria-hidden": "true" },
+	              "\xD7"
+	            )
+	          )
+	        ),
+	        React.createElement(DeleteConfirm, { muttName: muttName,
+	          muttId: muttId,
+	          handleDelete: handleDelete,
+	          closeModal: this.closeModal })
+	      );
+	    }
+	  }]);
+
+	  return EditModal;
+	}(_react.Component);
+
+	exports.default = EditModal;
+
+	var EditConfirm = function (_Component2) {
+	  _inherits(EditConfirm, _Component2);
+
+	  function EditConfirm() {
+	    _classCallCheck(this, EditConfirm);
+
+	    return _possibleConstructorReturn(this, (EditConfirm.__proto__ || Object.getPrototypeOf(EditConfirm)).apply(this, arguments));
+	  }
+
+	  _createClass(EditConfirm, [{
+	    key: "submitNameChange",
+	    value: function submitNameChange(e) {
+	      e.preventDefault();
+	      var _props2 = this.props,
+	          muttId = _props2.muttId,
+	          newName = _props2.newName,
+	          editMuttName = _props2.editMuttName,
+	          closeModal = _props2.closeModal;
+
+	      var form = e.nativeEvent.target;
+	      var requestAction = "../mutts/" + muttId;
+	      var requestData = { muttName: form.children[0].value };
+
+	      fetch(requestAction, {
+	        headers: {
+	          'Accept': 'application/json',
+	          'Content-Type': 'application/json'
+	        },
+	        method: "PUT",
+	        body: JSON.stringify(requestData)
+	      }).then(function (response) {
+	        return response.json();
+	      }).then(function (data) {
+	        editMuttName(muttId, newName);
+	        closeModal();
+	      }).catch(function (error) {
+	        console.error(error);
+	      });
+	    }
+	  }, {
+	    key: "render",
+	    value: function render() {
+	      var _props3 = this.props,
+	          muttName = _props3.muttName,
+	          newName = _props3.newName,
+	          muttId = _props3.muttId,
+	          closeModal = _props3.closeModal;
+
+	      return React.createElement(
+	        "div",
+	        { className: "reveal edit-confirm", id: "edit-confirm-" + muttId, "data-reveal": true },
+	        React.createElement(
+	          "p",
+	          { className: "lead" },
+	          "Change this mutt's name from " + muttName + " to " + newName + "?"
+	        ),
+	        React.createElement(
+	          "form",
+	          { id: "edit-" + muttId,
+	            className: "form form-edit",
+	            method: "PUT",
+	            action: "mutts/" + muttId,
+	            onSubmit: this.submitNameChange.bind(this)
+	          },
+	          React.createElement("input", { type: "hidden", name: "muttName", value: newName }),
+	          React.createElement("input", { type: "hidden", name: "muttId", value: muttId }),
+	          React.createElement("input", { type: "submit", className: "button tiny mutton", value: "Change name" })
+	        ),
+	        React.createElement(
+	          "button",
+	          { className: "button tiny mutton",
+	            "data-close": "edit-confirm-" + muttId,
+	            "aria-label": "Close modal",
+	            type: "button",
+	            onClick: closeModal
+	          },
+	          "Cancel"
+	        ),
+	        React.createElement(
+	          "button",
+	          { className: "close-button",
+	            "data-close": "edit-confirm-" + muttId,
+	            "aria-label": "Close modal",
+	            type: "button",
+	            onClick: closeModal
+	          },
+	          React.createElement(
+	            "span",
+	            { "aria-hidden": "true" },
+	            "\xD7"
+	          )
+	        )
+	      );
+	    }
+	  }]);
+
+	  return EditConfirm;
+	}(_react.Component);
+
+	var DeleteConfirm = function DeleteConfirm(props) {
+	  var muttName = props.muttName,
+	      muttId = props.muttId,
+	      handleDelete = props.handleDelete,
+	      closeModal = props.closeModal;
+
+	  return React.createElement(
+	    "div",
+	    { className: "reveal", id: "delete-modal-" + muttId, "data-reveal": true },
+	    React.createElement(
+	      "p",
+	      { className: "lead" },
+	      "Delete profile for " + muttName + "?"
+	    ),
+	    React.createElement(
+	      "p",
+	      null,
+	      "This will permanently remove all this mutt's data and images"
+	    ),
+	    React.createElement(
+	      "div",
+	      { className: "button-multi" },
+	      React.createElement(
+	        "a",
+	        { href: "/mutts/" + muttId + "/destroy",
+	          id: muttId + "-delete-button",
+	          className: "button tiny mutton delete-button",
+	          onClick: handleDelete
+	        },
+	        "Delete"
+	      ),
+	      React.createElement(
+	        "button",
+	        { className: "button tiny mutton",
+	          "data-close": "delete-modal-" + muttId,
+	          "aria-label": "Close modal",
+	          type: "button",
+	          onClick: closeModal
+	        },
+	        "Cancel"
+	      )
+	    ),
+	    React.createElement(
+	      "button",
+	      { className: "close-button", "data-close": "delete-modal-" + muttId, "aria-label": "Close modal", type: "button" },
+	      React.createElement(
+	        "span",
+	        { "aria-hidden": "true" },
+	        "\xD7"
+	      )
+	    )
+	  );
+	};
+
+/***/ },
+/* 515 */
 /***/ function(module, exports) {
 
 	// removed by extract-text-webpack-plugin
