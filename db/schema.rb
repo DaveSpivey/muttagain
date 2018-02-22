@@ -1,4 +1,3 @@
-# encoding: UTF-8
 # This file is auto-generated from the current state of the database. Instead
 # of editing this file, please use the migrations feature of Active Record to
 # incrementally modify your database, and then regenerate this schema definition.
@@ -17,45 +16,50 @@ ActiveRecord::Schema.define(version: 20161224040208) do
   enable_extension "plpgsql"
 
   create_table "breeds", force: :cascade do |t|
-    t.string   "name"
-    t.string   "link"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
-  create_table "guesses", force: :cascade do |t|
-    t.integer  "user_id"
-    t.integer  "mutt_id"
-    t.integer  "value"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.integer  "breed_id"
-  end
-
-  create_table "mutts", force: :cascade do |t|
-    t.string   "name"
-    t.integer  "owner_id"
+    t.string "name"
+    t.string "link"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
 
+  create_table "guesses", force: :cascade do |t|
+    t.bigint "user_id"
+    t.bigint "mutt_id"
+    t.integer "value"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.bigint "breed_id"
+    t.index ["breed_id"], name: "index_guesses_on_breed_id"
+    t.index ["mutt_id"], name: "index_guesses_on_mutt_id"
+    t.index ["user_id"], name: "index_guesses_on_user_id"
+  end
+
+  create_table "mutts", force: :cascade do |t|
+    t.string "name"
+    t.bigint "owner_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["owner_id"], name: "index_mutts_on_owner_id"
+  end
+
   create_table "photos", force: :cascade do |t|
-    t.integer  "mutt_id"
-    t.boolean  "profile",            default: false
-    t.datetime "created_at",                         null: false
-    t.datetime "updated_at",                         null: false
-    t.string   "image_file_name"
-    t.string   "image_content_type"
-    t.integer  "image_file_size"
+    t.bigint "mutt_id"
+    t.boolean "profile", default: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.string "image_file_name"
+    t.string "image_content_type"
+    t.integer "image_file_size"
     t.datetime "image_updated_at"
+    t.index ["mutt_id"], name: "index_photos_on_mutt_id"
   end
 
   create_table "users", force: :cascade do |t|
-    t.string   "name"
-    t.string   "email"
-    t.string   "password_digest"
-    t.datetime "created_at",      null: false
-    t.datetime "updated_at",      null: false
+    t.string "name"
+    t.string "email"
+    t.string "password_digest"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
 end

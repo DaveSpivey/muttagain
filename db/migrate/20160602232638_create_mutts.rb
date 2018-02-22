@@ -1,4 +1,4 @@
-class CreateMutts < ActiveRecord::Migration
+class CreateMutts < ActiveRecord::Migration[5.1]
   def change
     create_table :mutts do |t|
       t.string :name

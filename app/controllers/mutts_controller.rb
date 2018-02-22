@@ -45,13 +45,21 @@ class MuttsController < ApplicationController
 
   def create
     @mutt = Mutt.new(mutt_params)
-    @mutt.owner_id = current_user.id
-    if @mutt.save
-      redirect_to(@mutt)
-    else
-      flash[:error] = "Mutt could not be saved"
-      redirect_to new_mutt_path
+
+    respond_to do |format|
+      if @mutt.save
+        format.json { render json: @mutt }
+      else
+        format.json { render json: @mutt.errors }
+      end
     end
+
+    # if @mutt.save
+    #   redirect_to(@mutt)
+    # else
+    #   flash[:error] = "Mutt could not be saved"
+    #   redirect_to new_mutt_path
+    # end
   end
 
   def update
@@ -73,6 +81,6 @@ class MuttsController < ApplicationController
   end
 
   def mutt_params
-    params.require(:mutt).permit(:name)
+    params.require(:mutt).permit(:name, :owner_id)
   end
 end

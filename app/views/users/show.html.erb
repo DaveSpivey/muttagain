@@ -1,18 +1,20 @@
-<div id="profile-page">
-  <% if flash[:error] %>
-    <h2><%= flash[:error] %></h2>
-  <% else %>
-    <% profile_photos = [] %>
-    <% if @user.mutts %>
-      <% @user.mutts.each do |mutt| %>
-        <% photo = mutt.photos.find_by(profile: true) || mutt.photos.first %>
-        <% pic = !mutt.photos.empty? ? photo.image.url(:medium) : nil %>
-        <% profile_photos.push({'photo' => pic, 'muttId' => mutt.id}) %>
-      <% end %>
-    <% end %>
-    <%= react_component('UserPage', props: { user: @user, profile: @profile, mutts: @user.mutts, profilePhotos: profile_photos }) %>
+<% profile_photos = [] %>
+<% if @user.mutts %>
+  <% @user.mutts.each do |mutt| %>
+    <% photo = mutt.photos.find_by(profile: true) || mutt.photos.first %>
+    <% pic = !mutt.photos.empty? ? photo.image.url(:medium) : nil %>
+    <% profile_photos.push({'photo' => pic, 'muttId' => mutt.id}) %>
   <% end %>
-</div>
+<% end %>
+
+<%= content_tag :div,
+  id: "profile-page",
+  data: { user: @user, profile: @profile, mutts: @user.mutts, profilePhotos: profile_photos }.to_json do %>
+  <% if flash[:error] %>
+    <h3 class="error-message"><%= flash[:error] %></h3>
+  <% end %>
+  <%= javascript_pack_tag 'profile' %>
+<% end %>
 
 <% if false %>
 
