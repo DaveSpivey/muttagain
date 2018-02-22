@@ -2,29 +2,22 @@
 <html>
 <head>
   <title>MuttWhat</title>
-  <%= stylesheet_link_tag ('../foundation/stylesheets/foundation.css') %>
-  <%= stylesheet_link_tag ('../slideshow/slick.min.css') %>
-  <%= stylesheet_link_tag ('../slideshow/slick-theme.min.css') %>
-  <%= stylesheet_link_tag ('https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.6.0/slick.min.css') %>
-  <%= stylesheet_link_tag ('https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.6.0/slick-theme.min.css') %>
-  <%= stylesheet_link_tag    fingerprinted_asset('application'), media: 'all' %>
-  <%= javascript_include_tag fingerprinted_asset('application') %>
+  <meta name="viewport" content="width=device-width">
+  <link rel='stylesheet' href='../foundation/stylesheets/foundation.css'/>
+  <link rel='stylesheet' href='../slideshow/slick.min.css'/>
+  <link rel='stylesheet' href='../slideshow/slick-theme.min.css'/>
+  <%= stylesheet_pack_tag 'mutts' %>
   <%= csrf_meta_tags %>
 </head>
 <body>
 
-<%= render "layouts/nav" %>
+  <%= render "layouts/nav" %>
 
-<%= yield %>
+  <%= yield %>
 
-  <%= javascript_include_tag "../foundation/javascript/vendor/jquery.js" %>
-  <%= javascript_include_tag "../foundation/javascript/vendor/what-input.js" %>
-  <%= javascript_include_tag "../foundation/javascript/vendor/foundation.min.js" %>
-  <%= javascript_include_tag "../foundation/javascript/app.js" %>
-  <script>
-    $(document).ready(function() {
-      $(document).foundation();
-    });
-  </script>
+  <script src='../foundation/javascript/vendor/jquery.js'></script>
+  <script src='../foundation/javascript/vendor/what-input.js'></script>
+  <script src='../foundation/javascript/vendor/foundation.min.js'></script>
+  <script src='../foundation/javascript/app.js'></script>
 </body>
 </html>

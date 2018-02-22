@@ -13,7 +13,6 @@ rerun.txt
 pickle-email-*.html
 
 config/initializers/secret_token.rb
-config/secrets.yml
 
 /.env
 
@@ -23,7 +22,8 @@ config/secrets.yml
 /.bundle
 /vendor/bundle
 
-/node_modules/
+node_modules
+node_modules/*
 
 # these should all be checked in to normalize the environment:
 # Gemfile.lock, .ruby-version, .ruby-gemset
@@ -38,3 +38,6 @@ bower.json
 
 # Ignore pow environment settings
 .powenv
+/public/packs
+/public/packs-test
+/node_modules
