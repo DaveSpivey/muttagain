@@ -1,6 +1,8 @@
-<div id="mutt-display">
+<%= content_tag :div,
+  id: "mutt-display",
+  data: { mutts: @mutts, breeds: @breeds }.to_json do %>
   <% if flash[:error] %>
     <h3 class="error-message"><%= flash[:error] %></h3>
   <% end %>
-  <%= react_component('MuttDisplay', props: { mutts: @mutts, breeds: @breeds }) %>
-</div>
+  <%= javascript_pack_tag 'mutts' %>
+<% end %>

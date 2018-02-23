@@ -3,7 +3,7 @@ page = HTTParty.get('https://en.wikipedia.org/wiki/List_of_dog_breeds_recognized
 parse_page = Nokogiri::HTML(page)
 
 dogs = {}
-parse_page.css("#mw-content-text > ul").each do |group|
+parse_page.css("#mw-content-text ul").each do |group|
   group.css('li a').each do |dog|
     break if dog.text == "List of dog breeds"
     break if dog['rel'] == "nofollow"
@@ -12,5 +12,6 @@ parse_page.css("#mw-content-text > ul").each do |group|
 end
 
 dogs.each do |breed, href|
+  p breed
   Breed.create(name: breed, link: "https://en.wikipedia.org#{href}")
 end
