@@ -1,5 +1,5 @@
 class Mutt < ActiveRecord::Base
-  belongs_to :owner, class_name: :user
+  belongs_to :owner, class_name: "User"
   has_many :guesses, foreign_key: :mutt_id, dependent: :destroy
   has_many :photos, foreign_key: :mutt_id, dependent: :destroy
 

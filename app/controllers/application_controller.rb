@@ -1,7 +1,7 @@
 class ApplicationController < ActionController::Base
   helper ReactHelper
 
-  protect_from_forgery with: :null_session, only: Proc.new { |c| c.request.format.json? }
+  # protect_from_forgery with: :null_session, only: Proc.new { |c| c.request.format.json? }
   helper_method :current_user, :logged_in?
 
   def current_user
