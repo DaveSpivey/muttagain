@@ -71,12 +71,10 @@ export default class MuttDisplay extends React.Component {
     })
     .then((response) => response.json())
     .then((data) => {
-      console.log('data', data);
       if (data.guesses_left !== undefined && data.guesses_left >= 0) {
         const guessedBreed = breeds.find((breed) => {
           return breed.id == data.guess.breed_id;
         });
-        console.log(breeds);
         this.displayGuessSuccess(guessedBreed, data.guesses_left);
       } else {
         this.displayGuessFailure(data);

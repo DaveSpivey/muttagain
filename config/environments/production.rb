@@ -95,7 +95,7 @@ Rails.application.configure do
   config.active_record.dump_schema_after_migration = false
 
   # Paperclip config:
-  Paperclip.options[:command_path] = "/opt/ImageMagick/bin"
+  # Paperclip.options[:command_path] = "/opt/ImageMagick/bin"
 
   config.paperclip_defaults = {
     storage: :s3,

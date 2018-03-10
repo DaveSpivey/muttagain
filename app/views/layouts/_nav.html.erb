@@ -3,7 +3,6 @@
   <div class="nav-link-list">
     <%= link_to "Home", root_path, class: "nav-link" %>
     <% if logged_in? %>
-      <% p "hey now i'm in _nav.html.erb - current_user = #{current_user}" %>
       <%= link_to "Profile", user_path(current_user), class: "nav-link" %>
       <%= link_to "Log Out", logout_path, class: "nav-link" %>
     <% else %>
