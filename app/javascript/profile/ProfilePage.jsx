@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import EditModal from './EditModal.jsx';
 import NewMuttModal from './NewMuttModal.jsx';
+import NewPhotoModal from './NewPhotoModal.jsx';
 
 export default class ProfilePage extends Component {
 
@@ -10,6 +11,7 @@ export default class ProfilePage extends Component {
 
     this.editMuttName = this.editMuttName.bind(this);
     this.addNewMutt = this.addNewMutt.bind(this);
+    this.addNewPhoto = this.addNewPhoto.bind(this);
   }
 
   componentWillMount() {
@@ -24,6 +26,8 @@ export default class ProfilePage extends Component {
     let muttList = this.state.mutts;
     this.setState({ mutts: muttList.concat(mutt) });
   }
+
+  addNewPhoto(muttId, photo) {}
 
   editMuttName(id, name) {
     let newMuttList = this.state.mutts;
@@ -57,7 +61,8 @@ export default class ProfilePage extends Component {
                          mutt={ mutt }
                          profilePhoto={ muttPhoto }
                          handleDelete={ this.handleDelete }
-                         editMuttName={ this.editMuttName } />
+                         editMuttName={ this.editMuttName }
+                         addNewPhoto={ this.addNewPhoto } />
     });
 
     return (
@@ -77,7 +82,7 @@ export default class ProfilePage extends Component {
 }
 
 const MuttDetail = (props) => {
-  const { mutt, profilePhoto, handleDelete, editMuttName } = props;
+  const { mutt, profilePhoto, handleDelete, editMuttName, addNewPhoto } = props;
   const emptyPicMessage = "No photos yet for this mutt";
   let muttPhoto = profilePhoto ?
     <a href={ `/mutts/${mutt.id}` }>
@@ -98,11 +103,20 @@ const MuttDetail = (props) => {
         >
           Manage Mutt
         </a>
+        <a href="#" data-open={ `new-photo-modal-${mutt.id}` }
+           id={ `${mutt.id}-new-photo-button` }
+           className="button tiny mutton edit-button"
+        >
+          Add a Photo
+        </a>
       </div>
       <EditModal muttName={ mutt.name }
                  muttId={ mutt.id }
                  handleDelete={ handleDelete }
                  editMuttName={ editMuttName } />
+      <NewPhotoModal muttName={ mutt.name }
+                     muttId={ mutt.id }
+                     addNewPhoto={ addNewPhoto } />
     </div>
   );
 }

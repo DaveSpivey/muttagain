@@ -7,11 +7,14 @@ class MuttsController < ApplicationController
     @breeds = Breed.all
     @mutts = Mutt.all
     @photos = Photo.where(profile: true)
+    @slides = []
+    
     if @photos.empty?
       flash[:error] = "No mutt photos!"
     else
       mutts = {}
-      mutts["slides"] = @photos.map do |pic|
+      # mutts["slides"] = @photos.map do |pic|
+      @slides = @photos.map do |pic|
         mutt = Mutt.find(pic.mutt_id)
         guessed_breeds = {}
         mutt.guesses.each do |guess|
@@ -33,7 +36,7 @@ class MuttsController < ApplicationController
     respond_to do |format|
       format.html
       format.js
-      format.json { render json: mutts }
+      # format.json { render json: mutts }
     end
   end
 

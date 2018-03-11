@@ -1,6 +1,6 @@
 <%= content_tag :div,
   id: "mutt-display",
-  data: { mutts: @mutts, breeds: @breeds }.to_json do %>
+  data: { mutts: @mutts, breeds: @breeds, slides: @slides }.to_json do %>
   <% if flash[:error] %>
     <h3 class="error-message"><%= flash[:error] %></h3>
   <% end %>

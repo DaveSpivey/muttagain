@@ -64,7 +64,7 @@ export default class NewMuttModal extends Component {
           </form>
 
           <button className="close-button"
-                  data-close="#new-mutt-modal"
+                  data-close="new-mutt-modal"
                   aria-label="Close modal"
                   type="button"
                   onClick={ this.closeModal }

@@ -7,7 +7,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const data = JSON.parse(node.getAttribute('data'));
 
   ReactDOM.render(
-    <MuttDisplay mutts={ data.mutts } breeds={ data.breeds } />,
+    <MuttDisplay mutts={ data.mutts } breeds={ data.breeds } slides={ data.slides } />,
     node
   );
 });

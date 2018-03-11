@@ -7,20 +7,33 @@ class PhotosController < ApplicationController
 
   def create
     @mutt = Mutt.find(params[:mutt_id])
-    @photo = @mutt.photos.build(photo_params)
-    if @photo.save
-      flash[:success] = "New photo added!"
-      if @photo.profile
-        @mutt.photos.except(id: @photo.id).each do |photo|
-          photo.profile = false
+    p params
+    @photo = @mutt.photos.build({mutt_id: params[:mutt_id], image: params[:image], profile: params[:profile]})
+
+    respond_to do |format|
+      if @photo.save
+        flash[:success] = "New photo added!"
+        if @photo.profile
+          @mutt.photos.each do |photo|
+            if (photo.id != @photo.id)
+              photo.profile = false
+              photo.save
+            end
+          end
+
+        elsif @mutt.photos.where(profile: true).empty?
+          first_mutt = @mutt.photos.first
+          first_mutt.profile = true
+          first_mutt.save
         end
-      elsif @mutt.photos.where(profile: true).empty?
-        @mutt.photos.first.profile = true
+
+        # format.html redirect_to "users/#{@mutt.owner_id}"
+        format.json { render json: @photo }
+      else
+        flash[:error] = "Photo could not be uploaded"
+        # format.html render 'new'
+        format.json { render json: @photo.errors }
       end
-      redirect_to root_path
-    else
-      flash[:error] = "Photo could not be uploaded"
-      render 'new'
     end
   end
 
