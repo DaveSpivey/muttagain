@@ -32,7 +32,7 @@ export default class TopGuessDisplay extends React.Component {
     return topGuesses.map((guess) => {
       return (
         <li key={ guess.name } className="top-guess-item" >
-          <a href={ guess.link }>{ guess.name }</a>
+          <a href={ guess.link } target="_blank">{ guess.name }</a>
           <span className="guess-frequency">{ guess.frequency }</span>
         </li>
        );
@@ -46,11 +46,19 @@ export default class TopGuessDisplay extends React.Component {
   render() {
     const { muttId, guesses } = this.props;
     if (this.state.hidden) {
-      return (
-        <div onClick={ this.showGuesses } className="top-guess-display top-guess-display-hidden">
-          <p className="top-guesses">Show top guesses for this mutt</p>
-        </div>
-      );
+      if (Object.keys(guesses).length) {
+        return (
+          <div onClick={ this.showGuesses } className="top-guess-display top-guess-display-hidden">
+            <p className="top-guesses">Show top guesses for this mutt</p>
+          </div>
+        );
+      } else {
+        return (
+          <div className="top-guess-display no-guesses top-guess-display-hidden">
+            <p className="top-guesses">No guesses yet for this mutt</p>
+          </div>
+        );
+      }
     } else {
       const guessList = this.getTopGuesses(guesses);
       return (
