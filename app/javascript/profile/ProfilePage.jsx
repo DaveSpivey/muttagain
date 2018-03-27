@@ -7,7 +7,7 @@ export default class ProfilePage extends Component {
 
   constructor(props) {
     super(props);
-    this.state = { mutts: [] };
+    this.state = { mutts: [], photos: [], photoActionMessage: null };
 
     this.editMuttName = this.editMuttName.bind(this);
     this.addNewMutt = this.addNewMutt.bind(this);
@@ -20,6 +20,38 @@ export default class ProfilePage extends Component {
 
   componentDidMount() {
     $(document).foundation();
+    this.getMuttPhotos();
+  }
+
+  componentWillUpdate(nextProps, nextState) {
+    if (this.state.photoActionMessage !== null) {
+      this.setState({ photoActionMessage: null });
+    }
+  }
+
+  getMuttPhotos() {
+    this.state.mutts.forEach(mutt => {
+      
+      fetch(`/mutts/${ mutt.id }/photos`, {
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        },
+        method: 'GET'
+      })
+      .then((response) => response.json())
+      .then((data) => {
+        const photo = data.find(pic => pic.profile === true) || data[0];
+        if (photo) {
+          let profilePhotos = this.state.photos;
+          profilePhotos.push(photo);
+          this.setState({ photos: profilePhotos });
+        }
+      })
+      .catch((error) => {
+        console.error(error)
+      })
+    });
   }
 
   addNewMutt(mutt) {
@@ -27,7 +59,18 @@ export default class ProfilePage extends Component {
     this.setState({ mutts: muttList.concat(mutt) });
   }
 
-  addNewPhoto(muttId, photo) {}
+  addNewPhoto(photo) {
+    let actionMessage;
+    if (photo) {
+      actionMessage = "Photo uploaded successfully";
+      let photoList = this.state.photos;
+      this.setState({ photos: photoList.concat(photo), photoActionMessage: actionMessage });
+    } else {
+      actionMessage = "Uh oh, something went wrong uploading your photo";
+      console.warn('Error adding new photo, response:', photo);
+      this.setState({ photoActionMessage: actionMessage });
+    }
+  }
 
   editMuttName(id, name) {
     let newMuttList = this.state.mutts;
@@ -48,21 +91,22 @@ export default class ProfilePage extends Component {
   }
 
   render() {
-    const { userId, userName, profilePhotos } = this.props;
-    const { mutts } = this.state;
+    const { userId, userName } = this.props;
+    const { mutts, photos } = this.state;
+    
     const muttProfiles = mutts.map((mutt, idx) => {
-      let muttPhoto;
-      profilePhotos.forEach((photo) => {
-        if (photo.muttId == mutt.id) {
-          muttPhoto = photo.photo;
-        }
-      });
+      const muttPhotos = photos.filter(photo => photo.mutt_id === mutt.id);
+      const profilePhoto = muttPhotos.length 
+        ? muttPhotos.find(photo => photo.profile).url || muttPhotos[0].url
+        : undefined;
+
       return <MuttDetail key={ idx }
                          mutt={ mutt }
-                         profilePhoto={ muttPhoto }
+                         profilePhoto={ profilePhoto }
                          handleDelete={ this.handleDelete }
                          editMuttName={ this.editMuttName }
-                         addNewPhoto={ this.addNewPhoto } />
+                         addNewPhoto={ this.addNewPhoto }
+                         photoActionMessage={ this.state.photoActionMessage } />
     });
 
     return (
@@ -82,13 +126,19 @@ export default class ProfilePage extends Component {
 }
 
 const MuttDetail = (props) => {
-  const { mutt, profilePhoto, handleDelete, editMuttName, addNewPhoto } = props;
+  const { mutt, profilePhoto, handleDelete, editMuttName, addNewPhoto, photoActionMessage } = props;
   const emptyPicMessage = "No photos yet for this mutt";
-  let muttPhoto = profilePhoto ?
+
+  const muttPhoto = profilePhoto ?
     <a href={ `/mutts/${mutt.id}` }>
       <img src={ profilePhoto } />
     </a>
     : <p>{ emptyPicMessage }</p>
+
+  let message;
+  if (photoActionMessage) {
+    message = <div>{ photoActionMessage }</div>
+  }
 
   return (
     <div className="muttProfile">
@@ -117,6 +167,7 @@ const MuttDetail = (props) => {
       <NewPhotoModal muttName={ mutt.name }
                      muttId={ mutt.id }
                      addNewPhoto={ addNewPhoto } />
+      { message }
     </div>
   );
 }

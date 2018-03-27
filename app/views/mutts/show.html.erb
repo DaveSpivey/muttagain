@@ -13,9 +13,11 @@
 
 <h3><%= @mutt.name %>'s Photos</h3>
 
-<% @mutt.photos.each do |photo| %>
-  <p><%= image_tag photo.image.url(:small) %></p>
-<% end %>
+<div class="photo-container">
+	<% @mutt.photos.each do |photo| %>
+	  <div class="photo-image"><%= image_tag photo.image.url(:small) %></div>
+	<% end %>
+</div>
 
 <%= form_for :photo, url: new_mutt_photo_path(@mutt), method: :get do |f| %>
   <%= f.submit "Add a photo for #{ @mutt.name }" %>
