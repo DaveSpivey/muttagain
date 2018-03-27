@@ -22,28 +22,25 @@ export default class NewPhotoModal extends Component {
     const fileInput = form.querySelector('input[type="file"]');
     const profileInput = form.querySelector('input[type="checkbox"]');
     
-    const requestData = new FormData();
-    requestData.append('image', fileInput.files[0]);
-    requestData.append('mutt_id', this.props.muttId);
-    requestData.append('profile', profileInput.checked);
+    if (fileInput.files.length) {
+      const requestData = new FormData();
+      requestData.append('image', fileInput.files[0]);
+      requestData.append('mutt_id', this.props.muttId);
+      requestData.append('profile', profileInput.checked);
 
-    console.log("requestData", requestData);
-
-    fetch(this.formAction, {
-      method: form.method,
-      body: requestData
-    })
-    .then((response) => response.json())
-    .then((data) => {
-	    console.log("data:", data);
-      this.props.addNewPhoto(data);
-      this.closeModal();
-      // now we need to update the page so the photo is there when modal closes
-      // also code for "profile" photo doesn't seem to work..
-    })
-    .catch((error) => {
-      console.error(error)
-    })
+      fetch(this.formAction, {
+        method: form.method,
+        body: requestData
+      })
+      .then((response) => response.json())
+      .then((data) => {
+        this.props.addNewPhoto(data);
+        this.closeModal();
+      })
+      .catch((error) => {
+        console.error(error)
+      });
+    }
   }
 
   render() {
