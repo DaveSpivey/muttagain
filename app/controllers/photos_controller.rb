@@ -1,13 +1,22 @@
 class PhotosController < ApplicationController
 
+  before_action :set_mutt, only: [:index, :new, :create, :edit, :update, :destroy]
+
+  def index
+    @photos = @mutt.photos.map do |pic|
+      {id: pic.id, mutt_id: pic.mutt_id, profile: pic.profile, url: pic.image.url(:medium)}
+    end
+
+    respond_to do |format|
+      format.json { render json: @photos }
+    end
+  end
+
   def new
-    @mutt = Mutt.find(params[:mutt_id])
     @photo = @mutt.photos.build
   end
 
   def create
-    @mutt = Mutt.find(params[:mutt_id])
-    p params
     @photo = @mutt.photos.build({mutt_id: params[:mutt_id], image: params[:image], profile: params[:profile]})
 
     respond_to do |format|
@@ -27,17 +36,21 @@ class PhotosController < ApplicationController
           first_mutt.save
         end
 
-        # format.html redirect_to "users/#{@mutt.owner_id}"
-        format.json { render json: @photo }
+
+
+        format.json { render json: {id: @photo.id, mutt_id: @photo.mutt_id, profile: @photo.profile, url: @photo.image.url(:medium)} }
       else
         flash[:error] = "Photo could not be uploaded"
-        # format.html render 'new'
         format.json { render json: @photo.errors }
       end
     end
   end
 
   private
+
+  def set_mutt
+    @mutt = Mutt.find(params[:mutt_id])
+  end
 
   def photo_params
     params.require(:photo).permit(:image, :profile)

@@ -16,6 +16,8 @@ gem 'aws-sdk', '~> 2.3'
 gem 'httparty'
 gem 'nokogiri'
 
+gem 'petfinder', '~> 1.0', '>= 1.0.4'
+
 gem 'pry'
 
 # Use ActiveModel has_secure_password

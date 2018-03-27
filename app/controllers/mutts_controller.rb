@@ -13,7 +13,7 @@ class MuttsController < ApplicationController
       flash[:error] = "No mutt photos!"
     else
       mutts = {}
-      # mutts["slides"] = @photos.map do |pic|
+      
       @slides = @photos.map do |pic|
         mutt = Mutt.find(pic.mutt_id)
         guessed_breeds = {}
@@ -56,13 +56,6 @@ class MuttsController < ApplicationController
         format.json { render json: @mutt.errors }
       end
     end
-
-    # if @mutt.save
-    #   redirect_to(@mutt)
-    # else
-    #   flash[:error] = "Mutt could not be saved"
-    #   redirect_to new_mutt_path
-    # end
   end
 
   def update

@@ -1,15 +1,7 @@
-<% profile_photos = [] %>
-<% if @user.mutts %>
-  <% @user.mutts.each do |mutt| %>
-    <% photo = mutt.photos.find_by(profile: true) || mutt.photos.first %>
-    <% pic = !mutt.photos.empty? ? photo.image.url(:medium) : nil %>
-    <% profile_photos.push({'photo' => pic, 'muttId' => mutt.id}) %>
-  <% end %>
-<% end %>
 
 <%= content_tag :div,
   id: "profile-page",
-  data: { user: @user, profile: @profile, mutts: @user.mutts, profilePhotos: profile_photos }.to_json do %>
+  data: { user: @user, profile: @profile, mutts: @user.mutts }.to_json do %>
   <% if flash[:error] %>
     <h3 class="error-message"><%= flash[:error] %></h3>
   <% end %>
