@@ -29,7 +29,13 @@ class MuttsController < ApplicationController
           end
         end
 
-        { photoId: pic.id, photoUrl: pic.image.url(:large), muttId: mutt.id, muttName: mutt.name, muttGuesses: guessed_breeds }
+        { 
+          photoId: pic.id, 
+          photoUrl: pic.image.url(:large), 
+          muttId: mutt.id, 
+          muttName: mutt.name, 
+          muttGuesses: guessed_breeds 
+        }
       end
     end
 
@@ -41,6 +47,17 @@ class MuttsController < ApplicationController
   end
 
   def show
+    @user = current_user
+    @photos = @mutt.photos.map do |photo|
+      {
+        id: photo.id, 
+        mutt_id: photo.mutt_id, 
+        profile: photo.profile, 
+        smallUrl: photo.image.url(:small), 
+        mediumUrl: photo.image.url(:medium), 
+        largeUrl: photo.image.url(:large)
+      }
+    end
   end
 
   def edit
