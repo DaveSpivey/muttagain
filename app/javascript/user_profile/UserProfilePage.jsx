@@ -3,7 +3,7 @@ import EditModal from './EditModal.jsx';
 import NewMuttModal from './NewMuttModal.jsx';
 import NewPhotoModal from './NewPhotoModal.jsx';
 
-export default class ProfilePage extends Component {
+export default class UserProfilePage extends Component {
 
   constructor(props) {
     super(props);
