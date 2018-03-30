@@ -72,6 +72,12 @@ export default class EditModal extends Component {
 
 class EditConfirm extends Component {
 
+  constructor(props) {
+    super(props);
+    
+    this.submitNameChange = this.submitNameChange.bind(this);
+  }
+
   submitNameChange(e) {
     e.preventDefault();
     const { muttId, newName, editMuttName, closeModal } = this.props;
@@ -133,32 +139,64 @@ class EditConfirm extends Component {
   }
 }
 
-const DeleteConfirm = (props) => {
-  const { muttName, muttId, handleDelete, closeModal } = props;
-  return (
-    <div className="reveal" id={ `delete-modal-${muttId}` } data-reveal>
-      <p className="lead">{ `Delete profile for ${muttName}?` }</p>
-      <p>This will permanently remove all this mutt's data and images</p>
-      <div className="button-multi">
-        <a href={ `/mutts/${muttId}/destroy` }
-           id={ `${muttId}-delete-button` }
-           className="button tiny mutton delete-button"
-           onClick={ handleDelete }
-        >
-          Delete
-        </a>
-        <button className="button tiny mutton"
-                data-close={ `delete-modal-${muttId}` }
-                aria-label="Close modal"
-                type="button"
-                onClick={ closeModal }
-        >
-          Cancel
+class DeleteConfirm extends Component {
+
+  constructor(props) {
+    super(props);
+    
+    this.submitDelete = this.submitDelete.bind(this);
+  }
+
+  submitDelete(e) {
+    e.preventDefault();
+    const { muttId, newName, handleDelete, closeModal } = this.props;
+    const form = e.nativeEvent.target;
+    const requestAction = `../mutts/${muttId}`;
+
+    fetch(requestAction, {
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+      method: "DELETE"
+    })
+    .then((response) => response.json())
+    .then((data) => {
+      handleDelete(data);
+      closeModal();
+    })
+    .catch((error) => {
+      console.error(error)
+    })
+  }
+
+  render() {
+    const { muttName, muttId, closeModal } = this.props;
+    return (
+      <div className="reveal" id={ `delete-modal-${muttId}` } data-reveal>
+        <p className="lead">{ `Delete profile for ${muttName}?` }</p>
+        <p>This will permanently remove all this mutt's data and images</p>
+        <div className="button-multi">
+          <a href={ `/mutts/${muttId}/destroy` }
+             id={ `${muttId}-delete-button` }
+             className="button tiny mutton delete-button"
+             onClick={ this.submitDelete }
+          >
+            Delete
+          </a>
+          <button className="button tiny mutton"
+                  data-close={ `delete-modal-${muttId}` }
+                  aria-label="Close modal"
+                  type="button"
+                  onClick={ closeModal }
+          >
+            Cancel
+          </button>
+        </div>
+        <button className="close-button" data-close={ `delete-modal-${muttId}` } aria-label="Close modal" type="button">
+          <span aria-hidden="true">&times;</span>
         </button>
       </div>
-      <button className="close-button" data-close={ `delete-modal-${muttId}` } aria-label="Close modal" type="button">
-        <span aria-hidden="true">&times;</span>
-      </button>
-    </div>
-  );
+    );
+  }
 }

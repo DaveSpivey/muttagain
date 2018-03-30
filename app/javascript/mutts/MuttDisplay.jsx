@@ -118,35 +118,39 @@ export default class MuttDisplay extends React.Component {
 
     const mostRecentGuess = this.getMostRecentGuess();
 
-    return (
-      <div className="mutt-display-content">
-        <div className="row slide-row">
-          <div className="slideshow-wrapper large-9 medium-12 columns">
-            <Slideshow slides={ slides }
-                       currentSlide={ currentSlide }
-                       handleFlip={ this.handleFlip } />
+    if (currentMutt) {
+      return (
+        <div className="mutt-display-content">
+          <div className="row slide-row">
+            <div className="slideshow-wrapper large-9 medium-12 columns">
+              <Slideshow slides={ slides }
+                         currentSlide={ currentSlide }
+                         handleFlip={ this.handleFlip } />
+            </div>
+            <div className="current-mutt-section large-3 medium-12 columns">
+              <Select className="mutt-search-input"
+                      options={ options }
+                      { ...muttSearchConfig }
+                      value={ '' }
+                      onChange={ this.findMutt } />
+              <TopGuessDisplay muttId={ currentMutt.muttId }
+                               guesses={ currentMutt.muttGuesses } />
+            </div>
           </div>
-          <div className="current-mutt-section large-3 medium-12 columns">
-            <Select className="mutt-search-input"
-                    options={ options }
-                    { ...muttSearchConfig }
-                    value={ '' }
-                    onChange={ this.findMutt } />
-            <TopGuessDisplay muttId={ currentMutt.muttId }
-                             guesses={ currentMutt.muttGuesses } />
+          <div className="row guess-row">
+            <div className="guess-select medium-9 small-12 columns">
+              <GuessSelect breeds={ breeds }
+                           muttId={ currentMutt.muttId }
+                           handleGuess={ this.handleGuess }
+                           currentGuess={ this.state.currentGuess }
+                           getCurrentGuess={ this.getCurrentGuess } />
+              { mostRecentGuess }
+            </div>
           </div>
         </div>
-        <div className="row guess-row">
-          <div className="guess-select medium-9 small-12 columns">
-            <GuessSelect breeds={ breeds }
-                         muttId={ currentMutt.muttId }
-                         handleGuess={ this.handleGuess }
-                         currentGuess={ this.state.currentGuess }
-                         getCurrentGuess={ this.getCurrentGuess } />
-            { mostRecentGuess }
-          </div>
-        </div>
-      </div>
-    );
+      );
+    } else {
+      return <div className="mutt-display-content">No mutts yet!</div>;
+    }
   }
 };

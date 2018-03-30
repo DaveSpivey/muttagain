@@ -36,9 +36,8 @@ export default class NewMuttModal extends Component {
     })
     .then((response) => response.json())
     .then((data) => {
-	  console.log("data:", data);
       this.props.addNewMutt(data);
-      closeModal();
+      this.closeModal();
     })
     .catch((error) => {
       console.error(error)

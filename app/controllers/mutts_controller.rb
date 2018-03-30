@@ -85,6 +85,12 @@ class MuttsController < ApplicationController
   end
 
   def destroy
+    owner_id = @mutt.owner_id
+    @mutt.destroy
+
+    respond_to do |format|
+      format.json { render json: Mutt.where(owner_id: owner_id) }
+    end
   end
 
   private
