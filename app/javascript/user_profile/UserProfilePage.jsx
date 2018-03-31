@@ -1,17 +1,16 @@
 import React, { Component } from 'react';
-import EditModal from './EditModal.jsx';
 import NewMuttModal from './NewMuttModal.jsx';
-import NewPhotoModal from './NewPhotoModal.jsx';
+import EditModal from './EditModal.jsx';
 
 export default class UserProfilePage extends Component {
 
   constructor(props) {
     super(props);
-    this.state = { mutts: [], photos: [], photoActionMessage: null };
+    this.state = { mutts: [], photos: [] };
 
     this.editMuttName = this.editMuttName.bind(this);
     this.addNewMutt = this.addNewMutt.bind(this);
-    this.addNewPhoto = this.addNewPhoto.bind(this);
+    this.handleDelete = this.handleDelete.bind(this);
   }
 
   componentWillMount() {
@@ -21,12 +20,6 @@ export default class UserProfilePage extends Component {
   componentDidMount() {
     $(document).foundation();
     this.getMuttPhotos();
-  }
-
-  componentWillUpdate(nextProps, nextState) {
-    if (this.state.photoActionMessage !== null) {
-      this.setState({ photoActionMessage: null });
-    }
   }
 
   getMuttPhotos() {
@@ -59,19 +52,6 @@ export default class UserProfilePage extends Component {
     this.setState({ mutts: muttList.concat(mutt) });
   }
 
-  addNewPhoto(photo) {
-    let actionMessage;
-    if (photo) {
-      actionMessage = "Photo uploaded successfully";
-      let photoList = this.state.photos;
-      this.setState({ photos: photoList.concat(photo), photoActionMessage: actionMessage });
-    } else {
-      actionMessage = "Uh oh, something went wrong uploading your photo";
-      console.warn('Error adding new photo, response:', photo);
-      this.setState({ photoActionMessage: actionMessage });
-    }
-  }
-
   editMuttName(id, name) {
     let newMuttList = this.state.mutts;
     const mutt = newMuttList.find((mutt) => { return mutt.id === id });
@@ -79,35 +59,28 @@ export default class UserProfilePage extends Component {
     this.setState({ mutts: newMuttList });
   }
 
-  handleEdit(e) {
-    e.preventDefault();
-    const muttId = parseInt(e.nativeEvent.target.id);
-  }
-
-  handleDelete(e) {
-    e.preventDefault();
-    const muttId = parseInt(e.nativeEvent.target.id);
-    console.log(`This would delete mutt with id# ${muttId}`);
+  handleDelete(mutts) {
+    this.setState({ mutts: mutts });
   }
 
   render() {
     const { userId, userName } = this.props;
     const { mutts, photos } = this.state;
     
-    const muttProfiles = mutts.map((mutt, idx) => {
-      const muttPhotos = photos.filter(photo => photo.mutt_id === mutt.id);
-      const profilePhoto = muttPhotos.length 
-        ? muttPhotos.find(photo => photo.profile).url || muttPhotos[0].url
-        : undefined;
+    const muttProfiles = mutts.length ? (
+      mutts.map((mutt, idx) => {
+        const muttPhotos = photos.filter(photo => photo.mutt_id === mutt.id);
+        const profilePhoto = muttPhotos.length 
+          ? muttPhotos.find(photo => photo.profile) || muttPhotos[0]
+          : undefined;
 
-      return <MuttDetail key={ idx }
-                         mutt={ mutt }
-                         profilePhoto={ profilePhoto }
-                         handleDelete={ this.handleDelete }
-                         editMuttName={ this.editMuttName }
-                         addNewPhoto={ this.addNewPhoto }
-                         photoActionMessage={ this.state.photoActionMessage } />
-    });
+        return <MuttDetail key={ idx }
+                           mutt={ mutt }
+                           profilePhoto={ profilePhoto }
+                           handleDelete={ this.handleDelete }
+                           editMuttName={ this.editMuttName } />
+      })
+    ) : <div>No mutts yet -- add a mutt to get started!</div>
 
     return (
       <div>
@@ -126,19 +99,14 @@ export default class UserProfilePage extends Component {
 }
 
 const MuttDetail = (props) => {
-  const { mutt, profilePhoto, handleDelete, editMuttName, addNewPhoto, photoActionMessage } = props;
+  const { mutt, profilePhoto, handleDelete, editMuttName } = props;
   const emptyPicMessage = "No photos yet for this mutt";
 
   const muttPhoto = profilePhoto ?
     <a href={ `/mutts/${mutt.id}` }>
-      <img src={ profilePhoto } />
+      <img src={ profilePhoto.url } />
     </a>
     : <p>{ emptyPicMessage }</p>
-
-  let message;
-  if (photoActionMessage) {
-    message = <div>{ photoActionMessage }</div>
-  }
 
   return (
     <div className="muttProfile">
@@ -147,27 +115,20 @@ const MuttDetail = (props) => {
       </a>
       { muttPhoto }
       <div className="button-multi">
+        <a href={ `/mutts/${mutt.id}` } className="button tiny mutton">
+          { `Go to ${mutt.name}'s page` }
+        </a>
         <a href="#" data-open={ `edit-modal-${mutt.id}` }
            id={ `${mutt.id}-edit-button` }
            className="button tiny mutton edit-button"
         >
           Manage Mutt
         </a>
-        <a href="#" data-open={ `new-photo-modal-${mutt.id}` }
-           id={ `${mutt.id}-new-photo-button` }
-           className="button tiny mutton edit-button"
-        >
-          Add a Photo
-        </a>
       </div>
       <EditModal muttName={ mutt.name }
                  muttId={ mutt.id }
                  handleDelete={ handleDelete }
                  editMuttName={ editMuttName } />
-      <NewPhotoModal muttName={ mutt.name }
-                     muttId={ mutt.id }
-                     addNewPhoto={ addNewPhoto } />
-      { message }
     </div>
   );
 }
