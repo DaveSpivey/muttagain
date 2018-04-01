@@ -83,8 +83,8 @@ export default class UserProfilePage extends Component {
     ) : <div>No mutts yet -- add a mutt to get started!</div>
 
     return (
-      <div>
-        <h2>Welcome, { userName }!</h2>
+      <div className="user-profile">
+        <h1>Welcome, { userName }!</h1>
         <a href="#" data-open="new-mutt-modal"
            id="new-mutt-button"
            className="button mutton"
@@ -109,7 +109,7 @@ const MuttDetail = (props) => {
     : <p>{ emptyPicMessage }</p>
 
   return (
-    <div className="muttProfile">
+    <div className="mutt-details">
       <a href={ `/mutts/${mutt.id}` }>
         <p>{ mutt.name }</p>
       </a>

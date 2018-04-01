@@ -16,18 +16,7 @@ class MuttsController < ApplicationController
       
       @slides = @photos.map do |pic|
         mutt = Mutt.find(pic.mutt_id)
-        guessed_breeds = {}
-        mutt.guesses.each do |guess|
-          breed = Breed.find(guess.breed_id)
-          if !guessed_breeds.has_key? breed.name
-            guessed_breeds[breed.name] = {
-              link: breed.link,
-              frequency: 1
-            }
-          else
-            guessed_breeds[breed.name][:frequency] += 1
-          end
-        end
+        guessed_breeds = get_guessed_breeds(mutt)
 
         { 
           photoId: pic.id, 
@@ -42,7 +31,7 @@ class MuttsController < ApplicationController
     respond_to do |format|
       format.html
       format.js
-      # format.json { render json: mutts }
+      format.json { render json: { slides: @slides } }
     end
   end
 
@@ -58,6 +47,7 @@ class MuttsController < ApplicationController
         largeUrl: photo.image.url(:large)
       }
     end
+    @guesses = get_guessed_breeds(@mutt)
   end
 
   def edit
@@ -101,5 +91,23 @@ class MuttsController < ApplicationController
 
   def mutt_params
     params.require(:mutt).permit(:name, :owner_id)
+  end
+
+  def get_guessed_breeds(mutt)
+    guessed_breeds = {}
+    mutt.guesses.each do |guess|
+      breed = Breed.find(guess.breed_id)
+      if !guessed_breeds.has_key? breed.name
+        guessed_breeds[breed.name] = {
+          link: breed.link,
+          pic: breed.pic,
+          frequency: 1
+        }
+      else
+        guessed_breeds[breed.name][:frequency] += 1
+      end
+    end
+
+    guessed_breeds
   end
 end

@@ -53,5 +53,5 @@ breeds.each do |breed|
   end
 
   p "*************  " + breed + "  *************"
-  Breed.create(name: breed, link: link)
+  Breed.create(name: breed, link: link, pic: pic)
 end

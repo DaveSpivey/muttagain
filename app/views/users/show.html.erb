@@ -1,8 +1,14 @@
-<%= content_tag :div,
-  id: "user-profile-page",
-  data: { user: @user, profile: @profile, mutts: @user.mutts }.to_json do %>
-  <% if flash[:error] %>
-    <h3 class="error-message"><%= flash[:error] %></h3>
+<% if @profile == true %>
+  <%= content_tag :div,
+    id: "user-profile-page",
+    data: { user: @user, profile: @profile, mutts: @user.mutts }.to_json do %>
+    <% if flash[:error] %>
+      <h3 class="error-message"><%= flash[:error] %></h3>
+    <% end %>
+    <%= javascript_pack_tag 'user_profile' %>
   <% end %>
-  <%= javascript_pack_tag 'user_profile' %>
+<% else %>
+  <%= content_tag :div do %> 
+    <h4>Access not permitted to this page</h4>
+  <% end %>
 <% end %>

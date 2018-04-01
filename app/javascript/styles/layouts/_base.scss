@@ -5,9 +5,18 @@ body {
 h1, h2, h3, h4, h5, h6 {
   font-family: $primary-font;
 }
+h1 {
+  font-size: 32px;
+}
+h4 {
+  font-size: 22px;
+}
 .error-message {
   font-size: 18px;
   color: $error;
   margin: 0.25rem 1rem;
   float: right;
+}
+.photo-display {
+  text-align: center;
 }
