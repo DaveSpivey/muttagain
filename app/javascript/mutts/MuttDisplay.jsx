@@ -150,7 +150,7 @@ export default class MuttDisplay extends React.Component {
       return (
         <div className="mutt-display-content">
           <div className="row search-row">
-            <Select className="mutt-search-input large-6 medium-12 columns"
+            <Select className="mutt-search-input large-5 medium-12 columns"
                     options={ options }
                     { ...muttSearchConfig }
                     value={ '' }
