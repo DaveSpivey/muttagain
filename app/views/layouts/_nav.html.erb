@@ -1,5 +1,5 @@
 <nav class="nav-bar">
-  <span class="muttwhat">MuttWhat</span>
+  <%= link_to "MuttWhat", root_path, class: "muttwhat" %>
   <div class="nav-link-list">
     <%= link_to "Home", root_path, class: "nav-link" %>
     <% if logged_in? %>

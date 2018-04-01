@@ -7,7 +7,7 @@ export default class TopGuessDisplay extends React.Component {
     this.state = { hidden: true };
 
     this.getTopGuesses = this.getTopGuesses.bind(this);
-    this.showGuesses = this.showGuesses.bind(this);
+    this.toggleVisibility = this.toggleVisibility.bind(this);
   }
 
   componentWillReceiveProps(nextProps) {
@@ -22,25 +22,46 @@ export default class TopGuessDisplay extends React.Component {
       return {
         name: guessName,
         link: currentGuess.link,
+        pic: currentGuess.pic,
         frequency: currentGuess.frequency
       }
     });
-    let topGuesses = guessList.sort((a, b) => {
+    const topGuesses = guessList.sort((a, b) => {
       return b.frequency - a.frequency
     }).slice(0, 3);
 
     return topGuesses.map((guess) => {
+      let breedDetail;
+      if (guess.pic && guess.pic != "") {
+        breedDetail = (
+          <a href={ guess.link } target="_blank" className="link-group">
+            <div className="stock-pic">
+              <img src={ guess.pic } rel="stock photo for breed"/> 
+            </div>
+            <div className="breed-name"><span>{ guess.name }</span></div>
+          </a>
+        );
+      } else {
+        breedDetail = (
+          <div className="link-group">
+            <div className="stock-pic"><span style={{ marginRight: "6rem" }}></span></div>
+            <div className="breed-name"><span>{ guess.name }</span></div>
+          </div>
+        );
+      }
+
+      const frequency = guess.frequency === 1 ? "1 guess" : `${guess.frequency} guesses`;
       return (
-        <li key={ guess.name } className="top-guess-item" >
-          <a href={ guess.link } target="_blank">{ guess.name }</a>
-          <span className="guess-frequency">{ guess.frequency }</span>
-        </li>
-       );
+        <div key={ guess.name } className="guess-item">
+          { breedDetail }
+          <div className="guess-frequency"><span className="frequency-text">{ frequency }</span></div>
+        </div>
+      );
     });
   }
 
-  showGuesses() {
-    this.setState({ hidden: false });
+  toggleVisibility() {
+    this.setState({ hidden: !this.state.hidden });
   }
 
   render() {
@@ -48,13 +69,13 @@ export default class TopGuessDisplay extends React.Component {
     if (this.state.hidden) {
       if (Object.keys(guesses).length) {
         return (
-          <div onClick={ this.showGuesses } className="top-guess-display top-guess-display-hidden">
+          <div onClick={ this.toggleVisibility } className="guess-display guess-display-hidden">
             <p className="top-guesses">Show top guesses for this mutt</p>
           </div>
         );
       } else {
         return (
-          <div className="top-guess-display no-guesses top-guess-display-hidden">
+          <div className="guess-display no-guesses guess-display-hidden">
             <p className="top-guesses">No guesses yet for this mutt</p>
           </div>
         );
@@ -62,11 +83,11 @@ export default class TopGuessDisplay extends React.Component {
     } else {
       const guessList = this.getTopGuesses(guesses);
       return (
-        <div className="top-guess-display">
+        <div onClick={ this.toggleVisibility } className="guess-display">
           <p className="top-guesses">Top guesses for this mutt:</p>
-          <ul>
+          <div>
             { guessList }
-          </ul>
+          </div>
         </div>
       );
     }

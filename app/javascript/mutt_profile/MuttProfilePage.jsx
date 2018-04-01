@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import NewPhotoModal from './NewPhotoModal.jsx';
+import PhotoEditModal from './PhotoEditModal.jsx';
 
 export default class MuttProfilePage extends Component {
 
@@ -9,6 +10,7 @@ export default class MuttProfilePage extends Component {
 
     this.getProfilePhoto = this.getProfilePhoto.bind(this);
     this.getPhotoContainer = this.getPhotoContainer.bind(this);
+    this.getGuessContainer = this.getGuessContainer.bind(this);
     this.updatePhotos = this.updatePhotos.bind(this);
     this.addNewPhoto = this.addNewPhoto.bind(this);
   }
@@ -59,6 +61,57 @@ export default class MuttProfilePage extends Component {
   	return <div className="photo-container">{ allPhotos }</div>;
   }
 
+  getGuessContainer() {
+    const { guesses } = this.props;
+
+    const sortedGuesses = Object.keys(guesses).map((guessName) => {
+      const currentGuess = guesses[guessName];
+      return {
+        name: guessName,
+        link: currentGuess.link,
+        pic: currentGuess.pic,
+        frequency: currentGuess.frequency
+      }
+    }).sort((a, b) => {
+      return b.frequency - a.frequency
+    });
+
+    const guessItems = sortedGuesses.map((guess) => {
+      let breedDetail;
+      if (guess.pic && guess.pic != "") {
+        breedDetail = (
+          <a href={ guess.link } target="_blank" className="link-group">
+            <div className="stock-pic">
+              <img src={ guess.pic } rel="stock photo for breed"/> 
+            </div>
+            <div className="breed-name"><span>{ guess.name }</span></div>
+          </a>
+        );
+      } else {
+        breedDetail = (
+          <div className="link-group">
+            <div className="stock-pic"><span style={{ marginRight: "6rem" }}></span></div>
+            <div className="breed-name"><span>{ guess.name }</span></div>
+          </div>
+        );
+      }
+
+      const frequency = guess.frequency === 1 ? "1 guess" : `${guess.frequency} guesses`;
+      return (
+        <div key={ guess.name } className="guess-item">
+          { breedDetail }
+          <div className="guess-frequency"><span className="frequency-text">{ frequency }</span></div>
+        </div>
+      );
+    });
+
+    return (
+      <div className="guess-display">
+        { guessItems }
+      </div>
+    );
+  }
+
   addNewPhoto(photos) {
     let actionMessage;
     if (photos) {
@@ -76,7 +129,6 @@ export default class MuttProfilePage extends Component {
   	const { muttName, photos, photoActionMessage } = this.state;
   	let photoHeader = <div>No photos yet for this mutt</div>;
   	const profilePhoto = this.getProfilePhoto();
-  	const photoContainer = this.getPhotoContainer();
 
   	if (profilePhoto) {
   		photoHeader = (
@@ -94,97 +146,30 @@ export default class MuttProfilePage extends Component {
   	return (
   		<div className="mutt-profile">
   			<h1>{ muttName }'s page</h1>
-  			{ photoHeader }
-        <a href="#" data-open={ `new-photo-modal-${mutt.id}` }
-           id={ `${mutt.id}-new-photo-button` }
-           className="button tiny mutton edit-button"
-        >
-          Add a Photo
-        </a>
+        <div className="profile-header">
+    			{ photoHeader }
+          <a href="#" data-open={ `new-photo-modal-${mutt.id}` }
+             id={ `${mutt.id}-new-photo-button` }
+             className="button tiny mutton edit-button"
+          >
+            Add a Photo
+          </a>
+        </div>
         <NewPhotoModal muttName={ muttName }
                        muttId={ mutt.id }
                        addNewPhoto={ this.addNewPhoto } />
         { message }
-  			<h3>{ muttName }'s photos</h3>
-  			{ photoContainer }
+        <div className="row mutt-details">
+          <section className="photo-section large-8 medium-12 columns">
+    			  <h4>{ muttName }'s photos</h4>
+    			  { this.getPhotoContainer() }
+          </section>
+          <section className="guess-section large-4 medium-12 columns">
+            <h4>Users thought { muttName } was:</h4>
+            { this.getGuessContainer() }
+          </section>
+        </div>
   		</div>
 	  );
-  }
-}
-
-class PhotoEditModal extends Component {
-
-  constructor(props) {
-    super(props);
-
-    this.closeModal = this.closeModal.bind(this);
-    this.makeEditRequest = this.makeEditRequest.bind(this);
-    this.setAsProfile = this.setAsProfile.bind(this);
-    this.deletePhoto = this.deletePhoto.bind(this);
-  }
-
-  closeModal() {
-    const { photo } = this.props;
-    $(`#photo-edit-modal-${photo.id}`).foundation('close');
-  }
-
-  makeEditRequest(method, requestData) {
-    const { mutt, photo } = this.props;
-    const requestAction = `../mutts/${mutt.id}/photos/${photo.id}`;
-    const headers = {
-      'Accept': 'application/json',
-      'Content-Type': 'application/json'
-    };
-
-    let request = { headers: headers, method: method };
-    if (requestData) {
-      request.body = JSON.stringify(requestData);
-    }
-
-    fetch(requestAction, request)
-    .then((response) => response.json())
-    .then((data) => {
-      this.props.updatePhotos(data);
-      this.closeModal();
-    })
-    .catch((error) => {
-      console.error(error)
-    })
-  }
-
-  setAsProfile() {
-    this.makeEditRequest("PUT", { profile: true });
-  }
-
-  deletePhoto() {
-    this.makeEditRequest("DELETE");
-  }
-  
-  render() {
-    const { mutt, photo } = this.props;
-    return (
-      <div className="reveal" id={ `photo-edit-modal-${photo.id}` } data-reveal>
-        <img src={ photo.largeUrl } />
-        <p className="lead">{ `Edit photo` }</p>
-
-        <div className="button-multi">
-          <button className="button tiny mutton edit-button" onClick={ this.setAsProfile }>
-            Set as profile photo
-          </button>
-          <button className="button tiny mutton edit-button" onClick={ this.deletePhoto }>
-            Delete this photo
-          </button>
-        </div>
-
-        <button className="close-button"
-                data-close={ `photo-edit-modal-${photo.id}` }
-                aria-label="Close modal"
-                type="button"
-                onClick={ this.closeModal }
-        >
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-    );
   }
 }
