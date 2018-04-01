@@ -8,7 +8,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   ReactDOM.render(
     <UserProfilePage userId={ data.user.id } 
-    			           userName={ data.user.name } 
+    			           username={ data.user.username } 
     			           breeds={ data.profile } 
     			           mutts={ data.mutts } 
     			           profilePhotos={ data.profilePhotos } />,

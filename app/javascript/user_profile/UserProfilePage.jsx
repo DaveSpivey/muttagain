@@ -64,7 +64,7 @@ export default class UserProfilePage extends Component {
   }
 
   render() {
-    const { userId, userName } = this.props;
+    const { userId, username } = this.props;
     const { mutts, photos } = this.state;
     
     const muttProfiles = mutts.length ? (
@@ -84,7 +84,7 @@ export default class UserProfilePage extends Component {
 
     return (
       <div className="user-profile">
-        <h1>Welcome, { userName }!</h1>
+        <h1>Welcome, { username }!</h1>
         <a href="#" data-open="new-mutt-modal"
            id="new-mutt-button"
            className="button mutton"

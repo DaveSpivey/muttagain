@@ -125,7 +125,7 @@ export default class MuttProfilePage extends Component {
   }
 
   render() {
-  	const { mutt } = this.props;
+  	const { mutt, guesses } = this.props;
   	const { muttName, photos, photoActionMessage } = this.state;
   	let photoHeader = <div>No photos yet for this mutt</div>;
   	const profilePhoto = this.getProfilePhoto();
@@ -142,6 +142,20 @@ export default class MuttProfilePage extends Component {
     if (photoActionMessage) {
       message = <div>{ photoActionMessage }</div>
     }
+
+    const photoSection = photos.length ? (
+      <section className="photo-section large-8 medium-12 columns">
+        <h4>{ muttName }'s photos</h4>
+        { this.getPhotoContainer() }
+      </section>
+    ) : undefined;
+
+    const guessSection = guesses.length ? (
+      <section className="guess-section large-4 medium-12 columns">
+        <h4>Users thought { muttName } was:</h4>
+        { this.getGuessContainer() }
+      </section>
+    ) : undefined;
 
   	return (
   		<div className="mutt-profile">
@@ -160,14 +174,8 @@ export default class MuttProfilePage extends Component {
                        addNewPhoto={ this.addNewPhoto } />
         { message }
         <div className="row mutt-details">
-          <section className="photo-section large-8 medium-12 columns">
-    			  <h4>{ muttName }'s photos</h4>
-    			  { this.getPhotoContainer() }
-          </section>
-          <section className="guess-section large-4 medium-12 columns">
-            <h4>Users thought { muttName } was:</h4>
-            { this.getGuessContainer() }
-          </section>
+          { photoSection }
+          { guessSection }
         </div>
   		</div>
 	  );
