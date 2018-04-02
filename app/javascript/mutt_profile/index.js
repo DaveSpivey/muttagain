@@ -10,16 +10,16 @@ document.addEventListener('DOMContentLoaded', () => {
   if (data.user && data.user.id === data.mutt.owner_id) {
   	ReactDOM.render(
       <MuttProfilePage user={ data.user }
-	   	           	   mutt={ data.mutt }
-	   	           	   guesses={ data.guesses } 
-		           	   photos={ data.photos } />,
+	   	           	     mutt={ data.mutt }
+	   	           	     guesses={ data.guesses } 
+		           	       photos={ data.photos } />,
     node
   );
   } else {
   	ReactDOM.render(
       <PublicMuttPage mutt={ data.mutt }
-	   	           	  guesses={ data.guesses }  
-		           	  photos={ data.photos } />,
+	   	           	    guesses={ data.guesses }  
+		           	      photos={ data.photos } />,
     node
   );
   }

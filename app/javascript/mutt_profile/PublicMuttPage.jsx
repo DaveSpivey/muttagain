@@ -87,7 +87,7 @@ export default class PublicMuttPage extends Component {
   }
 
   render() {
-  	const { mutt, photos } = this.props;
+  	const { mutt, photos, guesses } = this.props;
   	let photoHeader = <div>No photos yet for this mutt</div>;
   	const profilePhoto = this.getProfilePhoto();
 
@@ -99,21 +99,29 @@ export default class PublicMuttPage extends Component {
 		  );
   	}
 
+    const photoSection = photos.length ? (
+      <section className="photo-section large-8 medium-12 columns">
+        <h4>{ mutt.name }'s photos</h4>
+        { this.getPhotoContainer() }
+      </section>
+    ) : undefined;
+
+    const guessSection = guesses.length ? (
+      <section className="guess-section large-4 medium-12 columns">
+        <h4>Users thought { mutt.name } was:</h4>
+        { this.getGuessContainer() }
+      </section>
+    ) : undefined;
+
   	return (
   		<div className="mutt-profile">
   			<h1>{ mutt.name }</h1>
         <div className="profile-header">
   			 { photoHeader }
         </div>
-        <div className="mutt-details">
-          <section className="photo-section">
-    			  <h4>{ mutt.name }'s photos</h4>
-    			  { this.getPhotoContainer() }
-          </section>
-          <section className="guess-section">
-            <h4>Users thought { mutt.name } was:</h4>
-            { this.getGuessContainer() }
-          </section>
+        <div className="row mutt-details">
+          { photoSection }
+          { guessSection }
         </div>
   		</div>
 	  );

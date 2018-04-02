@@ -60,6 +60,10 @@ export default class NewMuttModal extends Component {
                    onChange={ this.updateEntry }
                    ref={(input) => { this.name = input }} />
 
+            <input type="submit"
+                   value="Submit"
+                   className="button mutton" />
+
           </form>
 
           <button className="close-button"
