@@ -20,6 +20,8 @@ export default class MuttDisplay extends React.Component {
     this.handleGuess = this.handleGuess.bind(this);
     this.getCurrentGuess = this.getCurrentGuess.bind(this);
     this.getMostRecentGuess = this.getMostRecentGuess.bind(this);
+    this.getUserGuesses = this.getUserGuesses.bind(this);
+    this.undoGuess = this.undoGuess.bind(this);
     this.findMutt = this.findMutt.bind(this);
   }
 
@@ -28,12 +30,17 @@ export default class MuttDisplay extends React.Component {
   }
 
   updateSlides() {
+    const token = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+
     fetch(`/mutts`, {
       headers: {
         'Accept': 'application/json',
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        'X-Requested-With': 'XMLHttpRequest',
+        'X-CSRF-Token': token
       },
-      method: 'GET'
+      method: 'GET',
+      credentials: 'same-origin'
     })
     .then((response) => response.json())
     .then((data) => {
@@ -49,7 +56,7 @@ export default class MuttDisplay extends React.Component {
   }
 
   handleFlip(index) {
-    this.setState({ currentSlide: index, currentGuess: null })
+    this.setState({ currentSlide: index, currentGuess: null, mostRecentGuess: null })
   }
 
   getCurrentGuess(selection) {
@@ -77,6 +84,69 @@ export default class MuttDisplay extends React.Component {
       return slide.muttName == value.label
     });
     this.setState({ currentSlide: slideIndex });
+  }
+
+  getUserGuesses(guesses) {
+    return guesses.map((guess) => {
+      
+      let breedDetail;
+      if (guess.pic && guess.pic != "") {
+        breedDetail = (
+          <a href={ guess.link } target="_blank" className="link-group">
+            <div className="stock-pic">
+              <img src={ guess.pic } rel="stock photo for breed"/> 
+            </div>
+            <div className="breed-name"><span>{ guess.name }</span></div>
+          </a>
+        );
+      } else {
+        breedDetail = (
+          <div className="link-group">
+            <div className="stock-pic"><span style={{ marginRight: "6rem" }}></span></div>
+            <div className="breed-name"><span>{ guess.name }</span></div>
+          </div>
+        );
+      }
+
+      return (
+        <div key={ guess.name } className="guess-item">
+          { breedDetail }
+          <div id={ `guess-undo-${guess.id}` } className="guess-undo" onClick={ this.undoGuess }>
+            UNDO
+          </div>
+        </div>
+      );
+    });
+  }
+
+  undoGuess(e) {
+    const { slides, currentSlide } = this.state;
+    const currentMutt = slides[currentSlide];
+    const guessId = e.target.id.split("-")[2];
+    const muttId = currentMutt.muttId;
+    
+    fetch(`/mutts/${muttId}/guesses/${guessId}`, {
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+      method: "DELETE"
+    })
+    .then((response) => response.json())
+    .then((data) => {
+      const newSlides = slides.map((slide, idx) => {
+        let newSlide = slide;
+        if (idx === currentSlide) {
+          newSlide.userGuesses = data;
+        }
+        return newSlide;
+      });
+
+      this.setState({ slides: newSlides, mostRecentGuess: null });
+    })
+    .catch((error) => {
+      console.error(error)
+    })
   }
 
   handleGuess() {
@@ -132,6 +202,7 @@ export default class MuttDisplay extends React.Component {
     const { slides, currentSlide } = this.state;
     const { breeds, mutts } = this.props;
     const currentMutt = slides[currentSlide];
+    const { userGuesses } = currentMutt;
 
     let options = [];
     mutts.forEach((mutt) => {
@@ -145,6 +216,19 @@ export default class MuttDisplay extends React.Component {
     };
 
     const mostRecentGuess = this.getMostRecentGuess();
+
+    let selectColumns, userGuessDisplay;
+    if (userGuesses.length) {
+      selectColumns = 4;
+      userGuessDisplay = (
+        <div className="user-guesses large-4 medium-12 columns">
+          <h5>Your guesses:</h5>
+          { this.getUserGuesses(userGuesses) }
+        </div>
+      );
+    } else {
+      selectColumns = 8;
+    }
 
     if (currentMutt) {
       return (
@@ -164,7 +248,7 @@ export default class MuttDisplay extends React.Component {
             </div>
           </div>
           <div className="row guess-row">
-            <div className="guess-select large-8 medium-12 columns">
+            <div className={ `guess-select large-${selectColumns} medium-12 columns` }>
               <GuessSelect breeds={ breeds }
                            muttId={ currentMutt.muttId }
                            handleGuess={ this.handleGuess }
@@ -172,7 +256,8 @@ export default class MuttDisplay extends React.Component {
                            getCurrentGuess={ this.getCurrentGuess } />
               { mostRecentGuess }
             </div>
-            <div className="current-mutt-section large-4 medium-12 columns">
+            { userGuessDisplay }
+            <div className="current-mutt-section all-guesses large-4 medium-12 columns">
               <TopGuessDisplay muttId={ currentMutt.muttId }
                                guesses={ currentMutt.muttGuesses } />
             </div>

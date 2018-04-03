@@ -98,7 +98,7 @@ export default class PublicMuttPage extends Component {
   			</div>
 		  );
   	}
-
+    
     const photoSection = photos.length ? (
       <section className="photo-section large-8 medium-12 columns">
         <h4>{ mutt.name }'s photos</h4>
@@ -106,7 +106,7 @@ export default class PublicMuttPage extends Component {
       </section>
     ) : undefined;
 
-    const guessSection = guesses.length ? (
+    const guessSection = Object.keys(guesses).length ? (
       <section className="guess-section large-4 medium-12 columns">
         <h4>Users thought { mutt.name } was:</h4>
         { this.getGuessContainer() }

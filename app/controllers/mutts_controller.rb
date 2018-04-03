@@ -13,17 +13,20 @@ class MuttsController < ApplicationController
       flash[:error] = "No mutt photos!"
     else
       mutts = {}
+      user_id = current_user ? current_user.id : session[:session_id]
       
       @slides = @photos.map do |pic|
         mutt = Mutt.find(pic.mutt_id)
         guessed_breeds = get_guessed_breeds(mutt)
+        user_guesses = get_user_guesses(mutt, user_id)
 
         { 
           photoId: pic.id, 
           photoUrl: pic.image.url(:large), 
           muttId: mutt.id, 
           muttName: mutt.name, 
-          muttGuesses: guessed_breeds 
+          muttGuesses: guessed_breeds,
+          userGuesses: user_guesses
         }
       end
     end
@@ -109,5 +112,21 @@ class MuttsController < ApplicationController
     end
 
     guessed_breeds
+  end
+
+  def get_user_guesses(mutt, user_id)
+    user_guesses = Guess.where(mutt_id: mutt.id).where(user_id: user_id)
+    guesses = user_guesses.map do |guess|
+      breed = Breed.find(guess.breed_id)
+      
+      {
+        id: guess.id,
+        name: breed.name,
+        link: breed.link,
+        pic: breed.pic
+      }
+    end
+
+    guesses
   end
 end

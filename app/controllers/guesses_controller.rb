@@ -33,6 +33,25 @@ class GuessesController < ApplicationController
     end
   end
 
+  def destroy
+    guess = Guess.find(params[:id])
+    guess.destroy
+    updated_guesses = Guess.where(mutt_id: params[:mutt_id]).map do |guess|
+      breed = Breed.find(guess.breed_id)
+      {
+        id: guess.id,
+        name: breed.name,
+        link: breed.link,
+        pic: breed.pic
+      }
+    end
+
+
+    respond_to do |format|
+      format.json { render json: updated_guesses }
+    end
+  end
+
   # private
 
   # def guess_params

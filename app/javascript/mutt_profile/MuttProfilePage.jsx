@@ -151,7 +151,7 @@ export default class MuttProfilePage extends Component {
       </section>
     ) : undefined;
 
-    const guessSection = guesses.length ? (
+    const guessSection = Object.keys(guesses).length ? (
       <section className="guess-section large-4 medium-12 columns">
         <h4>Users thought { muttName } was:</h4>
         { this.getGuessContainer() }
