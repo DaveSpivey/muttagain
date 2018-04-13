@@ -50,6 +50,7 @@ export default class UserProfilePage extends Component {
   addNewMutt(mutt) {
     let muttList = this.state.mutts;
     this.setState({ mutts: muttList.concat(mutt) });
+    $(document).foundation();
   }
 
   editMuttName(id, name) {

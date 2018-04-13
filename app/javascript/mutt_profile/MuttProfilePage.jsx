@@ -117,6 +117,7 @@ export default class MuttProfilePage extends Component {
     if (photos) {
       actionMessage = "Photo uploaded successfully";
       this.setState({ photos: photos, photoActionMessage: actionMessage });
+      $(document).foundation();
     } else {
       actionMessage = "Uh oh, something went wrong uploading your photo";
       console.warn('Error adding new photo, response:', photo);
@@ -150,7 +151,7 @@ export default class MuttProfilePage extends Component {
       </section>
     ) : undefined;
 
-    const guessSection = guesses.length ? (
+    const guessSection = Object.keys(guesses).length ? (
       <section className="guess-section large-4 medium-12 columns">
         <h4>Users thought { muttName } was:</h4>
         { this.getGuessContainer() }
