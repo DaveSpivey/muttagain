@@ -19,4 +19,4 @@ I'd like to expand this project to include a page for finding rescue animals. Th
 
 All the breed stock photos and links are scraped from wikipedia, so for some of them, the Petfinder names don't match, and they're without images.
 
-![screenshot of home page on mobile](public/images/muttwhat-screenshot-mobile.png)
+![screenshot of home page on mobile](public/images/muttwhat-screenshot-mobile.png | width=300)
