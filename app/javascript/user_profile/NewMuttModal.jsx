@@ -36,9 +36,8 @@ export default class NewMuttModal extends Component {
     })
     .then((response) => response.json())
     .then((data) => {
-	  console.log("data:", data);
       this.props.addNewMutt(data);
-      closeModal();
+      this.closeModal();
     })
     .catch((error) => {
       console.error(error)
@@ -60,6 +59,10 @@ export default class NewMuttModal extends Component {
                    placeholder="Mutt's name"
                    onChange={ this.updateEntry }
                    ref={(input) => { this.name = input }} />
+
+            <input type="submit"
+                   value="Submit"
+                   className="button mutton" />
 
           </form>
 

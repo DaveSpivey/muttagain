@@ -1,44 +1,48 @@
 #mutt-display {
+  .search-row {
+    padding: 1rem 1rem 0 2rem;
+  }
   .slide-row {
     height: 52vh;
     padding-top: 1rem;
-    .top-guess-display-hidden {
-      cursor: pointer;
+  }
+  .guess-row {
+    padding: 2rem;
+    margin-top: 2.5rem;
+    @media (min-width: 600px) {
+      margin-top: 1.5rem;
     }
     .current-mutt-section {
-      margin-top: 1rem;
-    }
-    .top-guess-display {
-      border-radius: 3px;
-      background-color: $apricot;
-      padding: 0.5rem;
-      color: #EEE;
-      font-size: 1rem;
-      text-align: center;
-      ul {
-        margin-left: 0;
-        margin-bottom: 0;
+      @media (min-width: 1024px) {
+        margin-top: 2.25rem;
       }
+    }
+    .guess-undo {
+      padding-top: 1.5rem;
+      font-size: 11px;
+      font-weight: 600;
+      color: #1779ba;
+      cursor: pointer;
+      letter-spacing: 1px;
+    }
+  }
+  .guess-display {
+    ul {
+      margin-left: 0;
+      margin-bottom: 0;
+    }
+    .top-guesses {
+      margin-bottom: 0.5rem;
+    }
+    &.no-guesses {
+      background-color: #A9ABAF;
+      cursor: default;
+    }
+    &.guess-display-hidden {
+      cursor: pointer;
       .top-guesses {
         margin-bottom: 0;
       }
-      &.no-guesses {
-        background-color: #A9ABAF;
-        cursor: default;
-      }
     }
-    .top-guess-item {
-      list-style: none;
-      .guess-frequency {
-        float: right;
-      }
-    }
-  }
-  .guess-row {
-    height: 40vh;
-    padding: 2rem;
-  }
-  .mutt-search-input {
-    margin-bottom: 1rem;
   }
 }

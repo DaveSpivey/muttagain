@@ -1,11 +1,31 @@
-.photo-container {
-  display: flex;
-  flex-wrap: wrap;
-  align-content: space-between;
-  justify-content: flex-start;
-  .photo-image {
-	display: inline;
-	flex: 1 0 12rem;
-	margin-bottom: 3rem;
+.mutt-profile {
+  padding: 2rem;
+  .profile-header {
+    margin-bottom: 1rem;
+    .button {
+      margin-top: 1rem;
+    }
+  }
+  .mutt-details {
+    .photo-section {
+      padding: 0px;
+      .photo-container {
+        display: flex;
+        flex-wrap: wrap;
+        align-content: space-between;
+        justify-content: flex-start;
+        .photo-image {
+	        display: inline;
+	        flex: 0 0 9rem;
+	        margin-bottom: 3rem;
+          @media (min-width: 600px) {
+            flex: 0 0 12rem;
+          }
+        }
+      }
+    }
+    .guess-section {
+      padding: 0px;
+    }
   }
 }

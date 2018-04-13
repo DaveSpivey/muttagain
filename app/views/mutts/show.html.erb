@@ -1,24 +1,8 @@
-<% if flash[:error] %>
-  <h3 class="error-message"><%= flash[:error] %></h3>
-<% end %>
-
-<h1><%= @mutt.name %></h1>
-
-<% photo = @mutt.photos.find_by(profile: true) || @mutt.photos.first %>
-<% if photo %>
-  <p><%= image_tag photo.image.url(:medium) %></p>
-<% else %>
-  <p>No photos for this mutt</p>
-<% end %>
-
-<h3><%= @mutt.name %>'s Photos</h3>
-
-<div class="photo-container">
-	<% @mutt.photos.each do |photo| %>
-	  <div class="photo-image"><%= image_tag photo.image.url(:small) %></div>
-	<% end %>
-</div>
-
-<%= form_for :photo, url: new_mutt_photo_path(@mutt), method: :get do |f| %>
-  <%= f.submit "Add a photo for #{ @mutt.name }" %>
+<%= content_tag :div,
+  id: "mutt-profile-page",
+  data: { user: @user, mutt: @mutt, guesses: @guesses, photos: @photos }.to_json do %>
+  <% if flash[:error] %>
+    <h3 class="error-message"><%= flash[:error] %></h3>
+  <% end %>
+  <%= javascript_pack_tag 'mutt_profile' %>
 <% end %>

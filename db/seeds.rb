@@ -38,10 +38,20 @@ breeds.each do |breed|
 
   # special link for my pits, not represented
   if breed == "Pit Bull Terrier"
-  	link = "https://en.wikipedia.org/wiki/American_Staffordshire_Terrier"
+  	link = "https://en.wikipedia.org/wiki/Pit_bull"
   	pic = getStockImage(link)
   end
-  p "*************  " + breed + "  *************"
-  Breed.create(name: breed, link: link)
-end
 
+  if breed == "Newfoundland Dog"
+  	link = "https://en.wikipedia.org/wiki/Newfoundland_dog"
+  	pic = getStockImage(link)
+  end
+
+  if breed == "Saint Bernard / St. Bernard"
+  	link = "https://en.wikipedia.org/wiki/St._Bernard_(dog)"
+  	pic = getStockImage(link)
+  end
+
+  p "*************  " + breed + "  *************"
+  Breed.create(name: breed, link: link, pic: pic)
+end

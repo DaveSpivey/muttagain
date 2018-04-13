@@ -1,41 +1,14 @@
-
-<%= content_tag :div,
-  id: "profile-page",
-  data: { user: @user, profile: @profile, mutts: @user.mutts }.to_json do %>
-  <% if flash[:error] %>
-    <h3 class="error-message"><%= flash[:error] %></h3>
-  <% end %>
-  <%= javascript_pack_tag 'profile' %>
-<% end %>
-
-<% if false %>
-
-  <% if @profile %>
-    <h2>Welcome <%= current_user.name %>!</h2>
-  <% else %>
-    <h2><%= @user.name %>'s page</h2>
-  <% end %>
-
-  <% if flash[:error] %>
-    <h2><%= flash[:error] %><h2>
-  <% else %>
-    <h2 id="your-mutts">Your Mutts:</h2>
-  <% end %>
-
-  <% if @user.mutts %>
-    <% @user.mutts.each do |mutt| %>
-      <p><a href="/mutts/<%= mutt.id %>"><%= mutt.name %></a></p>
-      <% photo = mutt.photos.find_by(profile: true) || mutt.photos.first %>
-      <% if photo %>
-        <p><%= image_tag photo.image.url(:medium) %></p>
-      <% else %>
-        <p>No photos for this mutt</p>
-      <% end %>
+<% if @profile == true %>
+  <%= content_tag :div,
+    id: "user-profile-page",
+    data: { user: @user, profile: @profile, mutts: @user.mutts }.to_json do %>
+    <% if flash[:error] %>
+      <h3 class="error-message"><%= flash[:error] %></h3>
     <% end %>
+    <%= javascript_pack_tag 'user_profile' %>
   <% end %>
-
-  <%= form_for :mutt, url: new_mutt_path, method: :get do |f| %>
-    <%= f.submit "Add a New Mutt" %>
+<% else %>
+  <%= content_tag :div do %> 
+    <h4>Access not permitted to this page</h4>
   <% end %>
-
 <% end %>

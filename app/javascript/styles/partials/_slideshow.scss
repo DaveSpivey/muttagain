@@ -1,9 +1,13 @@
 .slideshow-wrapper {
   padding-top: 1rem;
+  overflow: auto;
 }
 .slideshow {
-  height: 50vh;
+  height: 52vh;
   margin-bottom: 3rem;
+  @media (min-width: 600px) {
+    height: 46vh;
+  }
   @media (min-width: 400px) {
     padding: 0 3rem;
   }

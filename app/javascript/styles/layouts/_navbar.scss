@@ -2,20 +2,33 @@
   height: 8vh;
   background-image: url("../images/black-fur.jpg");
   background-size: cover;
+  display: flex;
   padding: 0.5rem;
-  color: #EEE;
+  color: #EEEEEE;
   .muttwhat {
-    font-size: 2rem;
+    flex: 1 1 auto;
+    font-size: 1.5rem;
+    @media (min-width: 600px) {
+      font-size: 2rem;
+    }
+    color: #EEEEEE;
     letter-spacing: 0.25rem;
     margin-left: 0.5rem;
   }
   .nav-link-list {
-    float: right;
-    margin-top: 0.5rem;
-  }
-  .nav-link {
-    color: #EEE;
-    text-decoration: none;
-    margin-right: 2rem;
+    flex: 0 1 16rem;
+    margin-top: 0.75rem;
+    display: flex;
+    .nav-link {
+      flex: 1 1 auto;
+      font-size: 11px;
+      padding-right: 1rem;
+      text-align: right;
+      color: #EEE;
+      text-decoration: none;
+      @media (min-width: 600px) {
+        font-size: 14px;
+      }
+    }
   }
 }
