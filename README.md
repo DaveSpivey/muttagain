@@ -1,7 +1,7 @@
 # MuttWhat
 #### A social app for sharing dogs and guessing breeds
 
-![screenshot of home page](images/muttwhat-screenshot-home.png)
+![screenshot of home page](public/images/muttwhat-screenshot-home.png)
 
 [MuttWhat on heroku](https://muttwhat.herokuapp.com/) (please excuse initial load time, it's currently on their free service)
 
@@ -11,7 +11,7 @@ Flip through the carousel of mutt photos and make guesses from a dropdown of bre
 
 If you'd like to share a mutt (or several), you can sign up, create a profile for each and post pictures, then choose one profile pic to go onto the homepage. Purebreds every bit as welcome as wonky mutts! You don't have to sign up to play the guessing game -- 3 guesses max, either way.
 
-![screenshot of profile page](images/muttwhat-screenshot-profile.png)
+![screenshot of profile page](public/images/muttwhat-screenshot-profile.png)
 
 #### About the project
 
@@ -19,4 +19,4 @@ I'd like to expand this project to include a page for finding rescue animals. Th
 
 All the breed stock photos and links are scraped from wikipedia, so for some of them, the Petfinder names don't match, and they're without images.
 
-![screenshot of home page on mobile](images/muttwhat-screenshot-mobile.png)
+![screenshot of home page on mobile](public/images/muttwhat-screenshot-mobile.png)
