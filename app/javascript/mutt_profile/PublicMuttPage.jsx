@@ -1,16 +1,21 @@
 import React, { Component } from 'react';
-import PhotoViewModal from './PhotoViewModal.jsx';
+import { bind } from 'bind-decorator';
+import Modal from '../ui/Modal';
 
 export default class PublicMuttPage extends Component {
 
   constructor(props) {
     super(props);
+
+    this.state = { currentSelectedMutt: null };
   }
 
-  componentDidMount() {
-    $(document).foundation();
+  @bind
+  closeModal() {
+    this.setState({ modalActive: false, currentSelectedMutt: null });
   }
 
+  @bind
   getProfilePhoto() {
   	const { photos } = this.props;
   	if (photos.length) {
@@ -19,15 +24,20 @@ export default class PublicMuttPage extends Component {
   	return;
   }
 
+  @bind
+  showPicDetail(index) {
+    return () => {
+      this.setState({ currentSelectedMutt: index });
+    }
+  }
+
+  @bind
   getPhotoContainer() {
   	const { photos } = this.props;
   	const allPhotos = photos.map((photo, idx) => {
   		return (
-        <div key={ idx } className="photo-image">
-          <a href="#" data-open={ `photo-view-modal-${photo.id}` } id={ `photo-${photo.id}` }>
-            <img src={ photo.smallUrl } />
-          </a>
-          <PhotoViewModal mutt={ this.props.mutt } photo={ photo } />
+        <div key={ idx } className="photo-image selectable-photo">
+            <img src={ photo.smallUrl } onClick={ this.showPicDetail(idx) } />
         </div>
       );
   	});
@@ -35,6 +45,7 @@ export default class PublicMuttPage extends Component {
   	return <div className="photo-container">{ allPhotos }</div>;
   }
 
+  @bind
   getGuessContainer() {
     const { guesses } = this.props;
 
@@ -64,7 +75,11 @@ export default class PublicMuttPage extends Component {
       } else {
         breedDetail = (
           <div className="link-group">
-            <div className="stock-pic"><span style={{ marginRight: "6rem" }}></span></div>
+            <div className="stock-pic">
+              <svg className="paw-icon" viewBox="0 0 640 640">
+                <use xlinkHref="../images/paw-icon.svg#paw" />
+              </svg>
+            </div>
             <div className="breed-name"><span>{ guess.name }</span></div>
           </div>
         );
@@ -88,6 +103,8 @@ export default class PublicMuttPage extends Component {
 
   render() {
   	const { mutt, photos, guesses } = this.props;
+    const { currentSelectedMutt } = this.state;
+
   	let photoHeader = <div>No photos yet for this mutt</div>;
   	const profilePhoto = this.getProfilePhoto();
 
@@ -100,17 +117,23 @@ export default class PublicMuttPage extends Component {
   	}
     
     const photoSection = photos.length ? (
-      <section className="photo-section large-8 medium-12 columns">
+      <section className="photo-section">
         <h4>{ mutt.name }'s photos</h4>
         { this.getPhotoContainer() }
       </section>
     ) : undefined;
 
     const guessSection = Object.keys(guesses).length ? (
-      <section className="guess-section large-4 medium-12 columns">
+      <section className="guess-section">
         <h4>Users thought { mutt.name } was:</h4>
         { this.getGuessContainer() }
       </section>
+    ) : undefined;
+
+    const photoDetail = currentSelectedMutt !== null && photos[currentSelectedMutt] ? (
+      <div style={{ width: "100%", textAlign: "center" }}>
+        <img src={ photos[currentSelectedMutt].largeUrl } />
+      </div>
     ) : undefined;
 
   	return (
@@ -123,6 +146,10 @@ export default class PublicMuttPage extends Component {
           { photoSection }
           { guessSection }
         </div>
+
+        <Modal isActive={ currentSelectedMutt !== null } closeModal={ this.closeModal }>
+          { photoDetail }
+        </Modal>
   		</div>
 	  );
   }

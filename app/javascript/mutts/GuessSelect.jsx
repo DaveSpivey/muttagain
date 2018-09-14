@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import Select from 'react-select-plus';
 import 'react-select-plus/dist/react-select-plus.css';
 
@@ -45,3 +46,16 @@ GuessSelect.defaultProps = {
   breeds: [],
   muttId: ''
 }
+
+GuessSelect.propTypes = {
+  breeds: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.number,
+      name: PropTypes.string
+    })
+  ),
+  muttId: PropTypes.number,
+  handleGuess: PropTypes.func,
+  currentGuess: PropTypes.object,
+  getCurrentGuess: PropTypes.func
+};

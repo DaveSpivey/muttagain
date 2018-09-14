@@ -1,34 +1,73 @@
 .nav-bar {
-  height: 8vh;
-  background-image: url("../images/black-fur.jpg");
-  background-size: cover;
-  display: flex;
-  padding: 0.5rem;
-  color: #EEEEEE;
+  height: 4rem;
+  position: relative;
+  box-sizing: border-box;
+  color: #FFFFFF;
+  .nav-background {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-image: url("../images/brown-fur.jpg");
+    background-size: cover;
+    -webkit-filter: brightness(0.6);
+    filter: brightness(0.6);
+  }
+  .nav-content {
+    padding: 0.5rem 1rem;
+    display: flex;
+    height: 100%;
+  }
   .muttwhat {
     flex: 1 1 auto;
-    font-size: 1.5rem;
-    @media (min-width: 600px) {
-      font-size: 2rem;
-    }
-    color: #EEEEEE;
-    letter-spacing: 0.25rem;
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: #FFFFFF;
+    letter-spacing: 0.4rem;
+    padding-top: 0.5rem;
     margin-left: 0.5rem;
+    z-index: 10;
+    @media (min-width: $mobile) {
+      font-size: 1.5rem;
+      padding-top: 0.25rem;
+    }
+    a {
+      color: #FFFFFF;
+    }
   }
   .nav-link-list {
     flex: 0 1 16rem;
-    margin-top: 0.75rem;
     display: flex;
+    z-index: 10;
+    margin-left: 2rem;
+    @media (min-width: $mobile) {
+      margin-left: 0;
+    }
     .nav-link {
       flex: 1 1 auto;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
       font-size: 11px;
-      padding-right: 1rem;
+      padding-right: 0;
       text-align: right;
-      color: #EEE;
+      color: #FFFFFF;
+      letter-spacing: 1px;
       text-decoration: none;
-      @media (min-width: 600px) {
+      @media (min-width: $mobile) {
+        padding-right: 1rem;
         font-size: 14px;
       }
+      &:hover {
+        font-weight: 700;
+      }
     }
+  }
+  .error-message {
+    position: absolute;
+    top: 6.5rem;
+    right: 1rem;
+    font-size: 14px;
+    color: $error;
+    z-index: 30;
   }
 }

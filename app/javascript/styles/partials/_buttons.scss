@@ -1,6 +1,23 @@
-.mutton {
+.button {
   display: inline-block;
   border-radius: 3px;
+  vertical-align: middle;
+  padding: 0.85em 1em;
+  font-size: 0.9rem;
+  line-height: 1;
+  text-align: center;
+  cursor: pointer;
+  border: 1px solid transparent;
+  background-color: #1779BA;
+  color: #FEFEFE;
+  transition: background-color 0.25s ease-out, color 0.25s ease-out;
+  &:hover {
+    background-color: #1B689C;
+    color: #FFFFFF;
+  }
+  &.tiny {
+    font-size: 0.6rem;
+  }
 }
 
 .button-multi .mutton {

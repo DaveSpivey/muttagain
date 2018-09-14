@@ -1,7 +1,19 @@
-$primary-font: 'Roboto', sans-serif;
+// FONTS
 
-$blueberry: #6B7A8F;
-$nytblueberry: #6288A5;
-$apricot: #F7882F;
-$slideshow-brown: #EDD8BB;
-$error: #C62828;
+$primary-font: 		'Roboto', sans-serif;
+
+// COLORS
+
+$neutral-gray:		#9B9B9B;
+$light-steel:		#F2F8FB;
+
+$guess-display: 	#7CC1BE;
+$guess-hover: 		#8CD1CE;
+$apricot: 			#F7882F;
+$slideshow-brown: 	#EDD8BB;
+$error: 			#C62828;
+
+// BREAKPOINTS
+
+$mobile: 			600px;
+$large-screen: 		1024px;

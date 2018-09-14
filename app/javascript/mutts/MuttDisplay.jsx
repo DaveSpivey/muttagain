@@ -1,4 +1,6 @@
 import React from 'react';
+import { bind } from 'bind-decorator';
+import PropTypes from 'prop-types';
 import Select from 'react-select-plus';
 import Slideshow from './Slideshow.jsx';
 import GuessSelect from './GuessSelect.jsx';
@@ -14,21 +16,13 @@ export default class MuttDisplay extends React.Component {
       currentGuess: null,
       mostRecentGuess: null
     };
-
-    this.updateSlides = this.updateSlides.bind(this);
-    this.handleFlip = this.handleFlip.bind(this);
-    this.handleGuess = this.handleGuess.bind(this);
-    this.getCurrentGuess = this.getCurrentGuess.bind(this);
-    this.getMostRecentGuess = this.getMostRecentGuess.bind(this);
-    this.getUserGuesses = this.getUserGuesses.bind(this);
-    this.undoGuess = this.undoGuess.bind(this);
-    this.findMutt = this.findMutt.bind(this);
   }
 
   componentWillMount() {
     this.setState({ slides: this.props.slides });
   }
 
+  @bind
   updateSlides() {
     const token = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
 
@@ -55,14 +49,17 @@ export default class MuttDisplay extends React.Component {
     })
   }
 
+  @bind
   handleFlip(index) {
     this.setState({ currentSlide: index, currentGuess: null, mostRecentGuess: null })
   }
 
+  @bind
   getCurrentGuess(selection) {
     this.setState({ currentGuess: selection })
   }
 
+  @bind
   getMostRecentGuess() {
     const guessMessage = this.state.mostRecentGuess;
     if (guessMessage) {
@@ -79,6 +76,7 @@ export default class MuttDisplay extends React.Component {
     return;
   }
 
+  @bind
   findMutt(value) {
     const slideIndex = this.state.slides.findIndex((slide) => {
       return slide.muttName == value.label
@@ -86,6 +84,7 @@ export default class MuttDisplay extends React.Component {
     this.setState({ currentSlide: slideIndex });
   }
 
+  @bind
   getUserGuesses(guesses) {
     return guesses.map((guess) => {
       
@@ -102,7 +101,11 @@ export default class MuttDisplay extends React.Component {
       } else {
         breedDetail = (
           <div className="link-group">
-            <div className="stock-pic"><span style={{ marginRight: "6rem" }}></span></div>
+            <div className="stock-pic">
+              <svg className="paw-icon" viewBox="0 0 640 640">
+                <use xlinkHref="../images/paw-icon.svg#paw" />
+              </svg>
+            </div>
             <div className="breed-name"><span>{ guess.name }</span></div>
           </div>
         );
@@ -119,6 +122,7 @@ export default class MuttDisplay extends React.Component {
     });
   }
 
+  @bind
   undoGuess(e) {
     const { slides, currentSlide } = this.state;
     const currentMutt = slides[currentSlide];
@@ -137,7 +141,10 @@ export default class MuttDisplay extends React.Component {
       const newSlides = slides.map((slide, idx) => {
         let newSlide = slide;
         if (idx === currentSlide) {
-          newSlide.userGuesses = data;
+          const deletedGuessIndex = newSlide.userGuesses.findIndex(guess => guess.id == guessId);
+          if (deletedGuessIndex !== -1) {
+            newSlide.userGuesses.splice(deletedGuessIndex, 1);
+          }
         }
         return newSlide;
       });
@@ -149,6 +156,7 @@ export default class MuttDisplay extends React.Component {
     })
   }
 
+  @bind
   handleGuess() {
     const { slides, currentSlide, currentGuess } = this.state;
     const { breeds } = this.props;
@@ -185,10 +193,12 @@ export default class MuttDisplay extends React.Component {
     })
   }
 
+  @bind
   displayGuessSuccess(guessedBreed, guessesLeft) {
     this.setState({ mostRecentGuess: guessedBreed });
   }
 
+  @bind
   displayGuessFailure(data) {
     if (data.guesses_left) {
       this.setState({ mostRecentGuess: "Sorry, you've used all 3 guesses." });
@@ -217,38 +227,38 @@ export default class MuttDisplay extends React.Component {
 
     const mostRecentGuess = this.getMostRecentGuess();
 
-    let selectColumns, userGuessDisplay;
+    let sectionCount, userGuessDisplay;
     if (userGuesses.length) {
-      selectColumns = 4;
+      sectionCount = "three";
       userGuessDisplay = (
-        <div className="user-guesses large-4 medium-12 columns">
+        <div className="user-guesses">
           <h5>Your guesses:</h5>
           { this.getUserGuesses(userGuesses) }
         </div>
       );
     } else {
-      selectColumns = 8;
+      sectionCount = "two";
     }
 
     if (currentMutt) {
       return (
         <div className="mutt-display-content">
-          <div className="row search-row">
-            <Select className="mutt-search-input large-5 medium-12 columns"
+          <div className="search-row">
+            <Select className="mutt-search-input"
                     options={ options }
                     { ...muttSearchConfig }
-                    value={ '' }
+                    value=""
                     onChange={ this.findMutt } />
           </div>
-          <div className="row slide-row">
+          <div className="slide-row">
             <div className="slideshow-wrapper">
               <Slideshow slides={ slides }
                          currentSlide={ currentSlide }
                          handleFlip={ this.handleFlip } />
             </div>
           </div>
-          <div className="row guess-row">
-            <div className={ `guess-select large-${selectColumns} medium-12 columns` }>
+          <div className="guess-row">
+            <div className={ `guess-select ${sectionCount}-section` }>
               <GuessSelect breeds={ breeds }
                            muttId={ currentMutt.muttId }
                            handleGuess={ this.handleGuess }
@@ -257,7 +267,7 @@ export default class MuttDisplay extends React.Component {
               { mostRecentGuess }
             </div>
             { userGuessDisplay }
-            <div className="current-mutt-section all-guesses large-4 medium-12 columns">
+            <div className="current-mutt-section all-guesses">
               <TopGuessDisplay muttId={ currentMutt.muttId }
                                guesses={ currentMutt.muttGuesses } />
             </div>
@@ -268,4 +278,40 @@ export default class MuttDisplay extends React.Component {
       return <div className="mutt-display-content">No mutts yet!</div>;
     }
   }
+};
+
+MuttDisplay.propTypes = {
+  mutts: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.number,
+      name: PropTypes.string
+    })
+  ),
+  breeds: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.number,
+      name: PropTypes.string
+    })
+  ),
+  slides: PropTypes.arrayOf(
+    PropTypes.shape({ 
+      photoId: PropTypes.number, 
+      photoUrl: PropTypes.string, 
+      muttId: PropTypes.number, 
+      muttName: PropTypes.string, 
+      muttGuesses: PropTypes.shape({
+        link: PropTypes.string,
+        pic: PropTypes.string,
+        frequency: PropTypes.number
+      }),
+      userGuesses: PropTypes.arrayOf(
+        PropTypes.shape({
+          id: PropTypes.number,
+          name: PropTypes.string,
+          link: PropTypes.string,
+          pic: PropTypes.string
+        })
+      )
+    })
+  )
 };

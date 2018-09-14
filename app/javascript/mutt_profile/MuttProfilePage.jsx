@@ -1,18 +1,21 @@
 import React, { Component } from 'react';
-import NewPhotoModal from './NewPhotoModal.jsx';
-import PhotoEditModal from './PhotoEditModal.jsx';
+import { bind } from 'bind-decorator';
+import Modal from '../ui/Modal';
+import NewPhotoForm from './NewPhotoForm.jsx';
+import EditPhotoForm from './EditPhotoForm.jsx';
 
 export default class MuttProfilePage extends Component {
 
   constructor(props) {
     super(props);
-    this.state = { muttName: "", photos: [], photoActionMessage: null };
-
-    this.getProfilePhoto = this.getProfilePhoto.bind(this);
-    this.getPhotoContainer = this.getPhotoContainer.bind(this);
-    this.getGuessContainer = this.getGuessContainer.bind(this);
-    this.updatePhotos = this.updatePhotos.bind(this);
-    this.addNewPhoto = this.addNewPhoto.bind(this);
+    this.state = {
+      muttName: "",
+      photos: [],
+      currentEditingPhoto: null,
+      photoActionMessage: null,
+      newPhotoModalActive: false,
+      editPhotoModalActive: false
+    };
   }
 
   componentWillMount() {
@@ -21,16 +24,30 @@ export default class MuttProfilePage extends Component {
 	  }
   }
 
-  componentDidMount() {
-    $(document).foundation();
-  }
-
   componentWillUpdate(nextProps, nextState) {
     if (this.state.photoActionMessage !== null) {
       this.setState({ photoActionMessage: null });
     }
   }
 
+  @bind
+  openNewPhotoModal() {
+    this.setState({ newPhotoModalActive: true });
+  }
+
+  @bind
+  openEditPhotoModal(index) {
+    return () => {
+      this.setState({ editPhotoModalActive: true, currentEditingPhoto: index });
+    }
+  }
+
+  @bind
+  closeModal() {
+    this.setState({ newPhotoModalActive: false, editPhotoModalActive: false, currentEditingPhoto: null });
+  }
+
+  @bind
   getProfilePhoto() {
   	const { photos } = this.state;
   	if (photos.length) {
@@ -39,21 +56,21 @@ export default class MuttProfilePage extends Component {
   	return;
   }
 
+  @bind
   updatePhotos(photos) {
     if (photos) {
       this.setState({ photos: photos });
     }
+    this.closeModal();
   }
 
+  @bind
   getPhotoContainer() {
   	const { photos } = this.state;
   	const allPhotos = photos.map((photo, idx) => {
   		return (
-  			<div key={ idx } className="photo-image">
-          <a href="#" data-open={ `photo-edit-modal-${photo.id}` } id={ `photo-${photo.id}` }>
-  				  <img src={ photo.smallUrl } />
-          </a>
-          <PhotoEditModal mutt={ this.props.mutt } photo={ photo } updatePhotos={ this.updatePhotos } />
+  			<div key={ idx } className="photo-image selectable-photo">
+  				<img src={ photo.smallUrl } onClick={ this.openEditPhotoModal(idx) } />
   			</div>
   		);
   	});
@@ -61,6 +78,7 @@ export default class MuttProfilePage extends Component {
   	return <div className="photo-container">{ allPhotos }</div>;
   }
 
+  @bind
   getGuessContainer() {
     const { guesses } = this.props;
 
@@ -90,7 +108,11 @@ export default class MuttProfilePage extends Component {
       } else {
         breedDetail = (
           <div className="link-group">
-            <div className="stock-pic"><span style={{ marginRight: "6rem" }}></span></div>
+            <div className="stock-pic">
+              <svg className="paw-icon" viewBox="0 0 640 640">
+                <use xlinkHref="../images/paw-icon.svg#paw" />
+              </svg>
+            </div>
             <div className="breed-name"><span>{ guess.name }</span></div>
           </div>
         );
@@ -112,12 +134,13 @@ export default class MuttProfilePage extends Component {
     );
   }
 
+  @bind
   addNewPhoto(photos) {
     let actionMessage;
     if (photos) {
       actionMessage = "Photo uploaded successfully";
       this.setState({ photos: photos, photoActionMessage: actionMessage });
-      $(document).foundation();
+      this.closeModal();
     } else {
       actionMessage = "Uh oh, something went wrong uploading your photo";
       console.warn('Error adding new photo, response:', photo);
@@ -127,7 +150,15 @@ export default class MuttProfilePage extends Component {
 
   render() {
   	const { mutt, guesses } = this.props;
-  	const { muttName, photos, photoActionMessage } = this.state;
+  	const {
+      muttName,
+      photos,
+      photoActionMessage,
+      currentEditingPhoto,
+      newPhotoModalActive,
+      editPhotoModalActive
+    } = this.state;
+
   	let photoHeader = <div>No photos yet for this mutt</div>;
   	const profilePhoto = this.getProfilePhoto();
 
@@ -145,39 +176,47 @@ export default class MuttProfilePage extends Component {
     }
 
     const photoSection = photos.length ? (
-      <section className="photo-section large-8 medium-12 columns">
+      <section className="photo-section">
         <h4>{ muttName }'s photos</h4>
         { this.getPhotoContainer() }
       </section>
     ) : undefined;
 
     const guessSection = Object.keys(guesses).length ? (
-      <section className="guess-section large-4 medium-12 columns">
+      <section className="guess-section">
         <h4>Users thought { muttName } was:</h4>
         { this.getGuessContainer() }
       </section>
     ) : undefined;
+
+    const editForm = currentEditingPhoto !== null && currentEditingPhoto !== undefined
+        ? <EditPhotoForm mutt={ this.props.mutt } photo={ photos[currentEditingPhoto] } updatePhotos={ this.updatePhotos } />
+        : undefined;
 
   	return (
   		<div className="mutt-profile">
   			<h1>{ muttName }'s page</h1>
         <div className="profile-header">
     			{ photoHeader }
-          <a href="#" data-open={ `new-photo-modal-${mutt.id}` }
-             id={ `${mutt.id}-new-photo-button` }
-             className="button tiny mutton edit-button"
-          >
+          <button className="button tiny mutton edit-button" onClick={ this.openNewPhotoModal }>
             Add a Photo
-          </a>
+          </button>
         </div>
-        <NewPhotoModal muttName={ muttName }
-                       muttId={ mutt.id }
-                       addNewPhoto={ this.addNewPhoto } />
         { message }
         <div className="row mutt-details">
           { photoSection }
           { guessSection }
         </div>
+
+        <Modal isActive={ editPhotoModalActive } closeModal={ this.closeModal }>
+          { editForm }
+        </Modal>
+
+        <Modal isActive={ newPhotoModalActive } closeModal={ this.closeModal }>
+          <NewPhotoForm muttName={ muttName }
+                        muttId={ mutt.id }
+                        addNewPhoto={ this.addNewPhoto } />
+        </Modal>
   		</div>
 	  );
   }

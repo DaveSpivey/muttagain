@@ -1,16 +1,20 @@
 import React, { Component } from 'react';
-import NewMuttModal from './NewMuttModal.jsx';
-import EditModal from './EditModal.jsx';
+import { bind } from 'bind-decorator';
+import Modal from '../ui/Modal';
+import NewMuttForm from './NewMuttForm.jsx';
+import EditMuttForm from './EditMuttForm.jsx';
 
 export default class UserProfilePage extends Component {
 
   constructor(props) {
     super(props);
-    this.state = { mutts: [], photos: [] };
-
-    this.editMuttName = this.editMuttName.bind(this);
-    this.addNewMutt = this.addNewMutt.bind(this);
-    this.handleDelete = this.handleDelete.bind(this);
+    this.state = {
+      mutts: [],
+      photos: [],
+      currentEditingMutt: null,
+      newMuttModalActive: false,
+      editMuttModalActive: false
+    };
   }
 
   componentWillMount() {
@@ -18,10 +22,27 @@ export default class UserProfilePage extends Component {
   }
 
   componentDidMount() {
-    $(document).foundation();
     this.getMuttPhotos();
   }
 
+  @bind
+  openNewMuttModal() {
+    this.setState({ newMuttModalActive: true });
+  }
+
+  @bind
+  openEditMuttModal(index) {
+    return () => {
+      this.setState({ editMuttModalActive: true, currentEditingMutt: index });
+    }
+  }
+
+  @bind
+  closeModal() {
+    this.setState({ newMuttModalActive: false, editMuttModalActive: false, currentEditingMutt: null });
+  }
+
+  @bind
   getMuttPhotos() {
     this.state.mutts.forEach(mutt => {
       
@@ -47,26 +68,37 @@ export default class UserProfilePage extends Component {
     });
   }
 
+  @bind
   addNewMutt(mutt) {
     let muttList = this.state.mutts;
     this.setState({ mutts: muttList.concat(mutt) });
-    $(document).foundation();
+    this.closeModal();
   }
 
+  @bind
   editMuttName(id, name) {
     let newMuttList = this.state.mutts;
     const mutt = newMuttList.find((mutt) => { return mutt.id === id });
     mutt.name = name;
     this.setState({ mutts: newMuttList });
+    this.closeModal();
   }
 
+  @bind
   handleDelete(mutts) {
     this.setState({ mutts: mutts });
+    this.closeModal();
   }
 
   render() {
     const { userId, username } = this.props;
-    const { mutts, photos } = this.state;
+    const {
+      mutts,
+      photos,
+      currentEditingMutt,
+      newMuttModalActive,
+      editMuttModalActive
+    } = this.state;
     
     const muttProfiles = mutts.length ? (
       mutts.map((mutt, idx) => {
@@ -78,29 +110,41 @@ export default class UserProfilePage extends Component {
         return <MuttDetail key={ idx }
                            mutt={ mutt }
                            profilePhoto={ profilePhoto }
-                           handleDelete={ this.handleDelete }
-                           editMuttName={ this.editMuttName } />
+                           modalActive={ this.editMuttModalActive }
+                           openModal={ this.openEditMuttModal(idx) } />
       })
     ) : <div>No mutts yet -- add a mutt to get started!</div>
 
+    const editForm = currentEditingMutt !== null && mutts[currentEditingMutt] !== undefined ? (
+      <EditMuttForm muttName={ mutts[currentEditingMutt].name }
+                    muttId={ mutts[currentEditingMutt].id }
+                    handleDelete={ this.handleDelete }
+                    editMuttName={ this.editMuttName } />
+    ) : undefined;
+
     return (
       <div className="user-profile">
-        <h1>Welcome, { username }!</h1>
-        <a href="#" data-open="new-mutt-modal"
-           id="new-mutt-button"
-           className="button mutton"
-        >
+        <h1 className="welcome-header">Welcome, { username }!</h1>
+        <button className="button mutton new-mutt-button" onClick={ this.openNewMuttModal }>
           Add New Mutt
-        </a>
-        <NewMuttModal userId={ userId } addNewMutt={ this.addNewMutt } />
+        </button>
         { muttProfiles }
+
+        <Modal isActive={ newMuttModalActive } closeModal={ this.closeModal }>
+          <NewMuttForm userId={ userId } addNewMutt={ this.addNewMutt } />
+        </Modal>
+
+        <Modal isActive={ editMuttModalActive } closeModal={ this.closeModal }>
+          { editForm }
+        </Modal>
       </div>
     );
   }
 }
 
 const MuttDetail = (props) => {
-  const { mutt, profilePhoto, handleDelete, editMuttName } = props;
+  const { mutt, profilePhoto, openModal } = props;
+
   const emptyPicMessage = "No photos yet for this mutt";
 
   const muttPhoto = profilePhoto ?
@@ -119,17 +163,10 @@ const MuttDetail = (props) => {
         <a href={ `/mutts/${mutt.id}` } className="button tiny mutton">
           { `Go to ${mutt.name}'s page` }
         </a>
-        <a href="#" data-open={ `edit-modal-${mutt.id}` }
-           id={ `${mutt.id}-edit-button` }
-           className="button tiny mutton edit-button"
-        >
+        <a href="#" className="button tiny mutton edit-button" onClick={ openModal }>
           Manage Mutt
         </a>
       </div>
-      <EditModal muttName={ mutt.name }
-                 muttId={ mutt.id }
-                 handleDelete={ handleDelete }
-                 editMuttName={ editMuttName } />
     </div>
   );
 }

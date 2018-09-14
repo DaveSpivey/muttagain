@@ -1,47 +1,76 @@
 #mutt-display {
   .search-row {
     padding: 1rem 1rem 0 2rem;
+    .mutt-search-input {
+      width: 100%;
+      @media (min-width: $large-screen) {
+        width: 40%;
+      }
+    }
   }
   .slide-row {
-    height: 52vh;
+    height: 28vh;
     padding-top: 1rem;
+    @media (min-width: $mobile) {
+      height: 36vh;
+    }
+    @media (min-width: $large-screen) {
+      height: 44vh;
+    }
   }
   .guess-row {
     padding: 2rem;
     margin-top: 2.5rem;
-    @media (min-width: 600px) {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    @media (min-width: $mobile) {
       margin-top: 1.5rem;
     }
+    .guess-select {
+      &.two-section {
+        flex: 1 1 100%;
+        @media (min-width: $large-screen) {
+          flex: 0 1 60%;
+        }
+      }
+      &.three-section {
+        flex: 1 1 100%;
+        @media (min-width: 760px) {
+          flex: 0 1 48%;
+        }
+        @media (min-width: $large-screen) {
+          flex: 0 1 30%;
+        }
+      }
+    }
+    .user-guesses {
+      flex: 1 1 100%;
+      text-align: center;
+      @media (min-width: 760px) {
+          flex: 0 1 48%;
+        }
+      @media (min-width: $large-screen) {
+        flex: 0 1 30%;
+      }
+    }
     .current-mutt-section {
-      @media (min-width: 1024px) {
+      flex: 1 1 100%;
+      @media (min-width: $large-screen) {
+        flex: 0 1 30%;
         margin-top: 2.25rem;
       }
     }
     .guess-undo {
       padding-top: 1.5rem;
+      margin-left: 0.5rem;
       font-size: 11px;
       font-weight: 600;
-      color: #1779ba;
+      color: #1779BA;
       cursor: pointer;
       letter-spacing: 1px;
-    }
-  }
-  .guess-display {
-    ul {
-      margin-left: 0;
-      margin-bottom: 0;
-    }
-    .top-guesses {
-      margin-bottom: 0.5rem;
-    }
-    &.no-guesses {
-      background-color: #A9ABAF;
-      cursor: default;
-    }
-    &.guess-display-hidden {
-      cursor: pointer;
-      .top-guesses {
-        margin-bottom: 0;
+      &:hover {
+        color: #2799DA;
       }
     }
   }
