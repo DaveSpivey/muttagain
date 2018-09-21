@@ -1,21 +1,9 @@
 import React, { Component } from 'react';
+import { bind } from 'bind-decorator';
 
-export default class PhotoEditModal extends Component {
+export default class EditPhotoForm extends Component {
 
-  constructor(props) {
-    super(props);
-
-    this.closeModal = this.closeModal.bind(this);
-    this.makeEditRequest = this.makeEditRequest.bind(this);
-    this.setAsProfile = this.setAsProfile.bind(this);
-    this.deletePhoto = this.deletePhoto.bind(this);
-  }
-
-  closeModal() {
-    const { photo } = this.props;
-    $(`#photo-edit-modal-${photo.id}`).foundation('close');
-  }
-
+  @bind
   makeEditRequest(method, requestData) {
     const { mutt, photo } = this.props;
     const requestAction = `../mutts/${mutt.id}/photos/${photo.id}`;
@@ -33,27 +21,29 @@ export default class PhotoEditModal extends Component {
     .then((response) => response.json())
     .then((data) => {
       this.props.updatePhotos(data);
-      this.closeModal();
     })
     .catch((error) => {
       console.error(error)
     })
   }
 
+  @bind
   setAsProfile() {
     this.makeEditRequest("PUT", { profile: true });
   }
 
+  @bind
   deletePhoto() {
     this.makeEditRequest("DELETE");
   }
   
   render() {
     const { mutt, photo } = this.props;
-    return (
-      <div className="reveal photo-display" id={ `photo-edit-modal-${photo.id}` } data-reveal>
+
+    const content = photo ? (
+      <div>
         <img src={ photo.largeUrl } />
-        <p className="lead">{ `Edit photo` }</p>
+        <p className="modal-header">Edit photo</p>
 
         <div className="button-multi">
           <button className="button tiny mutton edit-button" onClick={ this.setAsProfile }>
@@ -63,15 +53,12 @@ export default class PhotoEditModal extends Component {
             Delete this photo
           </button>
         </div>
+      </div>
+    ) : undefined;
 
-        <button className="close-button"
-                data-close={ `photo-edit-modal-${photo.id}` }
-                aria-label="Close modal"
-                type="button"
-                onClick={ this.closeModal }
-        >
-          <span aria-hidden="true">&times;</span>
-        </button>
+    return (
+      <div className="photo-display">
+        { content }
       </div>
     );
   }

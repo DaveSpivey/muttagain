@@ -1,14 +1,20 @@
 .mutt-profile {
   padding: 2rem;
   .profile-header {
-    margin-bottom: 1rem;
+    margin: 1rem 0;
     .button {
       margin-top: 1rem;
     }
   }
   .mutt-details {
+    display: flex;
+    flex-wrap: wrap;
     .photo-section {
+      flex: 0 0 100%;
       padding: 0px;
+      @media (min-width: $large-screen) {
+        flex: 1 1 65%;
+      }
       .photo-container {
         display: flex;
         flex-wrap: wrap;
@@ -18,14 +24,28 @@
 	        display: inline;
 	        flex: 0 0 9rem;
 	        margin-bottom: 3rem;
-          @media (min-width: 600px) {
+          @media (min-width: $mobile) {
             flex: 0 0 12rem;
           }
+        }
+        .selectable-photo img {
+          cursor: pointer;
         }
       }
     }
     .guess-section {
+      flex: 0 0 100%;
       padding: 0px;
+      @media (min-width: $large-screen) {
+        flex: 1 1 35%;
+      }
+    }
+    .guess-display {
+      padding: 0.5rem;
+      .guess-item {
+        margin-top: 0.5rem;
+        margin-bottom: 0;
+      }
     }
   }
 }

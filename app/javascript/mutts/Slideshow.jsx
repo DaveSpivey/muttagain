@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import Slider from 'react-slick';
 
 export default class Slideshow extends React.Component {
@@ -61,3 +62,30 @@ const PrevArrow = (props) => {
     </div>
   );
 }
+
+Slideshow.propTypes = {
+  slides: PropTypes.arrayOf(
+    PropTypes.shape({ 
+      photoId: PropTypes.number, 
+      photoUrl: PropTypes.string, 
+      muttId: PropTypes.number, 
+      muttName: PropTypes.string, 
+      muttGuesses: PropTypes.shape({
+        link: PropTypes.string,
+        pic: PropTypes.string,
+        frequency: PropTypes.number
+      }),
+      userGuesses: PropTypes.arrayOf(
+        PropTypes.shape({
+          id: PropTypes.number,
+          name: PropTypes.string,
+          link: PropTypes.string,
+          pic: PropTypes.string
+        })
+      )
+    })
+  ),
+  currentSlide: PropTypes.number,
+  handleFlip: PropTypes.func
+};
+

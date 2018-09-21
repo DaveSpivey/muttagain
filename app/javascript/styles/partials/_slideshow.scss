@@ -1,15 +1,17 @@
 .slideshow-wrapper {
   padding-top: 1rem;
-  overflow: auto;
 }
 .slideshow {
-  height: 52vh;
+  height: 26vh;
   margin-bottom: 3rem;
-  @media (min-width: 600px) {
-    height: 46vh;
-  }
   @media (min-width: 400px) {
     padding: 0 3rem;
+  }
+  @media (min-width: $mobile) {
+    height: 34vh;
+  }
+  @media (min-width: $large-screen) {
+    height: 42vh;
   }
   .slick-slider {
     height: 100%;
@@ -19,22 +21,16 @@
   }
   .slick-list {
     height: 100%;
-    background-color: #EEE;
     @media (min-width: 600px) {
       background-color: #FFF;
     }
     img {
-      // visibility: hidden;
       padding: 0 0.25rem;
       height: 100%;
       margin: 0 auto;
     }
-    .slick-active > img {
-      // visibility: visible;
-      height: auto;
-      @media (min-width: 600px) {
-        height: 100%;
-      }
+    .slick-active {
+      object-fit: contain;
     }
   }
   .slick-next, .slick-prev {
